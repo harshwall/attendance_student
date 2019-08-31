@@ -106,7 +106,6 @@ class Student {
 		this._dob = map['dob'];
 		this._email = map['email'];
 		this._mobile = map['mobile'];
-		this._documentId = map[''];
 	}
 
 }

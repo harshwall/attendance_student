@@ -143,20 +143,5 @@ class LoginState extends State<Login> {
         ));
   }
 
-  bool checkLogin(Student incoming) {
-    final algorithm = PBKDF2();
-//    final hash = Password.hash(inputPass, algorithm);
-    final hash=inputPass;
-     Firestore.instance.collection('stud')
-    .where('regNo', isEqualTo: student.regNo)
-    .where('pass', isEqualTo: hash).getDocuments()
-    .then((QuerySnapshot docs) async {
-      if(docs.documents.length!=0)
-      incoming = Student.fromMapObject(docs.documents[0].data);
-    });
-    if(incoming == null)
-        return false;
-    else
-        return true;
-  }
+
 }

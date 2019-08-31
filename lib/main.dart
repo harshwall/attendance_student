@@ -1,4 +1,5 @@
 import 'package:attendance_student/screens/login.dart';
+import 'package:attendance_student/screens/signup.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         brightness: Brightness.dark,
       ),
-      home: Login(),
+      home: SignUp(),
 //      home: Scaffold(
 //        appBar: AppBar(
 //          backgroundColor: Colors.black,
