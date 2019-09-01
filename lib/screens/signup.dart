@@ -2,13 +2,12 @@ import 'dart:async';
 import 'dart:io';
 import 'package:attendance_student/classes/student.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:intl/intl.dart';
 import 'package:validators/validators.dart';
 import 'package:password/password.dart';
-import 'package:path/path.dart';
 import 'package:image_picker/image_picker.dart';
 
 
@@ -58,39 +57,47 @@ class SignUpState extends State<SignUp> {
           child: Center(
             child: ListView(
               children: <Widget>[
-                GestureDetector(
-                  onTap: () {
-                    getImage();
-                    Fluttertoast.showToast(
-                            msg: 'hello',
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.CENTER,
-                            timeInSecForIos: 1,
-                            backgroundColor: Colors.red,
-                            textColor: Colors.white,
-                            fontSize: 16.0
-                        );
-                  },
-                  child: CircleAvatar(
-                    radius: 100.0,
-                    backgroundColor: Colors.blueAccent,
-                    child: ClipOval(
-                      child: SizedBox(
-                        width: 180.0,
-                        height: 180.0,
-                        child: (_image!=null)?
-                        Image.file(_image,fit: BoxFit.fill):
-                        Image.network(
-                          "https://www.google.co.in/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png",
-                          fit: BoxFit.fill,
-                        ),
+                SizedBox(height: 20.0,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Align(
+                      alignment: Alignment.center,
+                      child: CircleAvatar(
+                        radius: 100.0,
+                        backgroundColor: Colors.blueAccent,
+                        child: ClipOval(
+                          child: SizedBox(
+                            width: 180.0,
+                            height: 180.0,
+                            child: (_image!=null)?
+                            Image.file(_image,fit: BoxFit.fill):
+                            Image.network(
+                              "https://www.google.co.in/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png",
+                              fit: BoxFit.fill,
+                            ),
 
+                          ),
+                        ),
                       ),
+
                     ),
-                  ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 60.0),
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.cloud_upload,
+                          size: 30.0,
+                        ),
+                        onPressed: () {
+                          getImage();
+                        },
+                      ),
+                    )
+                  ],
                 ),
                 Padding(
-                  padding: EdgeInsets.all(5.0),
+                  padding: EdgeInsets.only(top: 10.0, left: 5.0, right: 5.0, bottom: 5.0),
                   child: TextFormField(
                     onSaved: (value) {
                       student.name = value;
@@ -341,6 +348,7 @@ class SignUpState extends State<SignUp> {
                             _signUpForm.currentState.save();
                             student.gender = genderToString(_genderValue);
                             student.category = _currentCategorySelected;
+                            uploadPic(context);
 
 //                        Fluttertoast.showToast(
 //                            msg: student.name+' '+student.regNo+' '+student.pass+' '
@@ -394,6 +402,16 @@ class SignUpState extends State<SignUp> {
 
     setState(() {
       _image = image;
+    });
+  }
+
+  Future uploadPic(BuildContext context) async {
+    String fileName = student.regNo;
+    StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child(fileName);
+    StorageUploadTask uploadTask = firebaseStorageRef.putFile(_image);
+    StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
+    setState(() {
+      Scaffold.of(context).showSnackBar(SnackBar(content: Text('Image Uploaded Successfully'),));
     });
   }
 
