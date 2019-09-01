@@ -76,6 +76,9 @@ class LoginState extends State<Login> {
                     padding: EdgeInsets.all(10.0),
                     child: RaisedButton(
                         child: Text('Login'),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                        ),
                         elevation: 20.0,
                         onPressed: () {
 
@@ -135,6 +138,9 @@ class LoginState extends State<Login> {
                       child: Text(
                         'New User? Sign Up',
                         style: TextStyle(color: Colors.black),
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
                       ),
                       color: Colors.white,
                       onPressed: () {

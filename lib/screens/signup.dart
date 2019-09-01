@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:attendance_student/classes/student.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,9 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:intl/intl.dart';
 import 'package:validators/validators.dart';
 import 'package:password/password.dart';
+import 'package:path/path.dart';
+import 'package:image_picker/image_picker.dart';
+
 
 
 class SignUp extends StatefulWidget {
@@ -21,7 +25,9 @@ class SignUpState extends State<SignUp> {
   var _passKey = GlobalKey<FormFieldState>();
 
 
+
   Student student = Student.blank();
+  File _image;
 
   int _genderValue = 0;
 
@@ -33,7 +39,6 @@ class SignUpState extends State<SignUp> {
   var categoryList = ['Open', 'OBC', 'SC/ST', 'Other'];
   var _currentCategorySelected = '';
 
-  bool _saving = false;
 
   void initState() {
     super.initState();
@@ -47,14 +52,45 @@ class SignUpState extends State<SignUp> {
         title: Text('SignUp'),
       ),
       body: Container(
-        padding: EdgeInsets.all(10.0),
+        padding: EdgeInsets.all(5.0),
         child: Form(
           key: _signUpForm,
           child: Center(
             child: ListView(
               children: <Widget>[
+                GestureDetector(
+                  onTap: () {
+                    getImage();
+                    Fluttertoast.showToast(
+                            msg: 'hello',
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.CENTER,
+                            timeInSecForIos: 1,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                            fontSize: 16.0
+                        );
+                  },
+                  child: CircleAvatar(
+                    radius: 100.0,
+                    backgroundColor: Colors.blueAccent,
+                    child: ClipOval(
+                      child: SizedBox(
+                        width: 180.0,
+                        height: 180.0,
+                        child: (_image!=null)?
+                        Image.file(_image,fit: BoxFit.fill):
+                        Image.network(
+                          "https://www.google.co.in/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png",
+                          fit: BoxFit.fill,
+                        ),
+
+                      ),
+                    ),
+                  ),
+                ),
                 Padding(
-                  padding: EdgeInsets.all(10.0),
+                  padding: EdgeInsets.all(5.0),
                   child: TextFormField(
                     onSaved: (value) {
                       student.name = value;
@@ -71,7 +107,7 @@ class SignUpState extends State<SignUp> {
                 ),
 
                 Padding(
-                  padding: EdgeInsets.all(10.0),
+                  padding: EdgeInsets.all(5.0),
                   child: TextFormField(
                     obscureText: true,
                     key: _passKey,
@@ -89,7 +125,7 @@ class SignUpState extends State<SignUp> {
                 ),
 
                 Padding(
-                  padding: EdgeInsets.all(10.0),
+                  padding: EdgeInsets.all(5.0),
                   child: TextFormField(
                     obscureText: true,
                     onSaved: (value) {
@@ -108,7 +144,7 @@ class SignUpState extends State<SignUp> {
                 ),
 
                 Padding(
-                  padding: EdgeInsets.all(10.0),
+                  padding: EdgeInsets.all(5.0),
                   child: TextFormField(
                     onSaved: (value) {
                       student.regNo = value;
@@ -125,7 +161,7 @@ class SignUpState extends State<SignUp> {
                 ),
 
                 Padding(
-                  padding: EdgeInsets.all(10.0),
+                  padding: EdgeInsets.all(5.0),
                   child: TextFormField(
                     onSaved: (value) {
                       student.father = value;
@@ -142,7 +178,7 @@ class SignUpState extends State<SignUp> {
                 ),
 
                 Padding(
-                  padding: EdgeInsets.all(10.0),
+                  padding: EdgeInsets.all(5.0),
                   child: TextFormField(
                     onSaved: (value) {
                       student.email = value;
@@ -160,7 +196,7 @@ class SignUpState extends State<SignUp> {
                 ),
 
                 Padding(
-                  padding: EdgeInsets.all(10.0),
+                  padding: EdgeInsets.all(5.0),
                   child: TextFormField(
                     keyboardType: TextInputType.number,
                     onSaved: (value) {
@@ -179,7 +215,7 @@ class SignUpState extends State<SignUp> {
                 ),
 
                 Padding(
-                  padding: EdgeInsets.all(10.0),
+                  padding: EdgeInsets.all(5.0),
                   child: DateTimeField(
                     format: dateFormat,
                     onShowPicker: (context, currentValue) {
@@ -206,7 +242,7 @@ class SignUpState extends State<SignUp> {
                 ),
 
                 Padding(
-                  padding: EdgeInsets.all(10.0),
+                  padding: EdgeInsets.all(5.0),
                   child: Row(
                     children: <Widget>[
                       Text(
@@ -259,7 +295,7 @@ class SignUpState extends State<SignUp> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(10.0),
+                  padding: EdgeInsets.all(5.0),
                   child: Row(
                     children: <Widget>[
                       Text(
@@ -287,17 +323,24 @@ class SignUpState extends State<SignUp> {
                   ),
                 ),
 
-                RaisedButton(
-                  child: Text('Submit'),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0)
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      if(_signUpForm.currentState.validate() ) {
-                        _signUpForm.currentState.save();
-                        student.gender = genderToString(_genderValue);
-                        student.category = _currentCategorySelected;
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Container(
+                        width: 50.0,
+                      ),
+                    ),
+                    RaisedButton(
+                      child: Text('Submit'),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0)
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          if(_signUpForm.currentState.validate() ) {
+                            _signUpForm.currentState.save();
+                            student.gender = genderToString(_genderValue);
+                            student.category = _currentCategorySelected;
 
 //                        Fluttertoast.showToast(
 //                            msg: student.name+' '+student.regNo+' '+student.pass+' '
@@ -311,11 +354,18 @@ class SignUpState extends State<SignUp> {
 //                            fontSize: 16.0
 //                        );
 
-                        Firestore.instance.collection('stud').add(student.toMap());
-                        Navigator.of(context).pop();
-                      }
-                    });
-                  },
+                            Firestore.instance.collection('stud').add(student.toMap());
+                            Navigator.of(context).pop();
+                          }
+                        });
+                      },
+                    ),
+                    Expanded(
+                      child: Container(
+                        width: 50.0,
+                      ),
+                    )
+                  ],
                 )
 
               ],
@@ -336,6 +386,17 @@ class SignUpState extends State<SignUp> {
         return 'Other';
     }
   }
+
+  Future getImage() async {
+    var image = await ImagePicker.pickImage(
+      source: ImageSource.gallery
+    );
+
+    setState(() {
+      _image = image;
+    });
+  }
+
 
 
 

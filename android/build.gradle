@@ -17,6 +17,9 @@ allprojects {
         google()
         jcenter()
     }
+    configurations.all {
+        resolutionStrategy.force "androidx.core:core:1.0.2"
+    }
 }
 
 rootProject.buildDir = '../build'
