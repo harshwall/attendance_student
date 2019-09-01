@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         brightness: Brightness.dark,
       ),
-      home: SignUp(),
+      home: Login(),
 //      home: Scaffold(
 //        appBar: AppBar(
 //          backgroundColor: Colors.black,

@@ -1,5 +1,13 @@
+import 'dart:async';
 import 'package:attendance_student/classes/student.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:intl/intl.dart';
+import 'package:validators/validators.dart';
+import 'package:password/password.dart';
+
 
 class SignUp extends StatefulWidget {
   @override
@@ -12,13 +20,20 @@ class SignUpState extends State<SignUp> {
   var _signUpForm = GlobalKey<FormState>();
   var _passKey = GlobalKey<FormFieldState>();
 
-  DateTime dateTime = DateTime.now();
 
   Student student = Student.blank();
+
   int _genderValue = 0;
+
+  final algorithm = PBKDF2();
+
+  final dateFormat = DateFormat("yyyy-MM-dd");
+  DateTime dateTime = DateTime.now();
 
   var categoryList = ['Open', 'OBC', 'SC/ST', 'Other'];
   var _currentCategorySelected = '';
+
+  bool _saving = false;
 
   void initState() {
     super.initState();
@@ -78,7 +93,7 @@ class SignUpState extends State<SignUp> {
                   child: TextFormField(
                     obscureText: true,
                     onSaved: (value) {
-                      student.pass = value;
+                      student.pass = Password.hash(value, algorithm);
                     },
                     validator: (String value) {
                       if (value.length<6 || _passKey.currentState.value != value )
@@ -165,6 +180,33 @@ class SignUpState extends State<SignUp> {
 
                 Padding(
                   padding: EdgeInsets.all(10.0),
+                  child: DateTimeField(
+                    format: dateFormat,
+                    onShowPicker: (context, currentValue) {
+                      return showDatePicker(
+                          context: context,
+                          initialDate: dateTime,
+                          firstDate: DateTime(1970),
+                          lastDate: DateTime(2050));
+                    },
+                    onSaved: (value) {
+                      student.dob = value.toString();
+                    },
+                    validator: (DateTime value) {
+                      if(!isDate(value.toString()) || value == null || value.compareTo(DateTime.now().subtract(Duration(days: 1))) >= 0)
+                        return 'Enter correct DOB';
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'Date of Birth',
+                      errorStyle: TextStyle(color: Colors.yellow),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5.0))
+                    ),
+                  )
+                ),
+
+                Padding(
+                  padding: EdgeInsets.all(10.0),
                   child: Row(
                     children: <Widget>[
                       Text(
@@ -247,12 +289,32 @@ class SignUpState extends State<SignUp> {
 
                 RaisedButton(
                   child: Text('Submit'),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0)
+                  ),
                   onPressed: () {
-                    if(_signUpForm.currentState.validate()) {
-                      _signUpForm.currentState.save();
-                      student.gender = genderToString(_genderValue);
-                      student.category = _currentCategorySelected;
-                    }
+                    setState(() {
+                      if(_signUpForm.currentState.validate() ) {
+                        _signUpForm.currentState.save();
+                        student.gender = genderToString(_genderValue);
+                        student.category = _currentCategorySelected;
+
+//                        Fluttertoast.showToast(
+//                            msg: student.name+' '+student.regNo+' '+student.pass+' '
+//                                +student.father+' '+student.gender+' '+student.category+' '
+//                                +student.dob+' '+student.email+' '+student.mobile,
+//                            toastLength: Toast.LENGTH_SHORT,
+//                            gravity: ToastGravity.CENTER,
+//                            timeInSecForIos: 1,
+//                            backgroundColor: Colors.red,
+//                            textColor: Colors.white,
+//                            fontSize: 16.0
+//                        );
+
+                        Firestore.instance.collection('stud').add(student.toMap());
+                        Navigator.of(context).pop();
+                      }
+                    });
                   },
                 )
 
@@ -274,4 +336,8 @@ class SignUpState extends State<SignUp> {
         return 'Other';
     }
   }
+
+
+
+
 }

@@ -1,4 +1,5 @@
 import 'package:attendance_student/classes/student.dart';
+import 'package:attendance_student/screens/signup.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,8 @@ class LoginState extends State<Login> {
 
   Student student = Student.blank();
   String inputPass="";
+
+  final algorithm = PBKDF2();
 
   @override
   Widget build(BuildContext context) {
@@ -96,13 +99,14 @@ class LoginState extends State<Login> {
 
                           Firestore.instance.collection('stud')
                             .where('regNo', isEqualTo: student.regNo)
-                            .where('pass', isEqualTo: inputPass)
+                            .where('pass', isEqualTo: Password.hash(inputPass, algorithm))
                             .getDocuments()
                             .then((QuerySnapshot docs) {
                               try {
-                                incoming = Student.fromMapObject(
-                                    docs.documents[0].data);
+                                incoming = Student.fromMapObject(docs.documents[0].data);
+                                incoming.documentId = docs.documents[0].documentID;
                                 check=true;
+                                student = incoming;
                               }
                               catch(e){
                                 check=false;
@@ -111,7 +115,7 @@ class LoginState extends State<Login> {
 
                              });
                              Fluttertoast.showToast(
-                                 msg: check.toString(),
+                                 msg: check.toString()+'  '+student.documentId,
                                  toastLength: Toast.LENGTH_SHORT,
                                  gravity: ToastGravity.CENTER,
                                  timeInSecForIos: 1,
@@ -133,7 +137,11 @@ class LoginState extends State<Login> {
                         style: TextStyle(color: Colors.black),
                       ),
                       color: Colors.white,
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) {
+                          return SignUp();
+                        }));
+                      },
                     ),
                   )
                 ],

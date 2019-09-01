@@ -7,7 +7,7 @@ class Student {
 	String _father;
 	String _gender;
 	String _category;
-	DateTime _dob;
+	String _dob;
 	String _email;
 	String _mobile;
 	String _documentId;
@@ -18,7 +18,7 @@ class Student {
 	Student.blank();
 
 	Student(this._regNo, this._pass, this._name, this._father, this._gender,
-		this._category, this._dob, this._email, this._mobile, this._documentId);
+		this._category, this._dob, this._email, this._mobile);
 
 	String get mobile => _mobile;
 
@@ -39,9 +39,9 @@ class Student {
 		_email = value;
 	}
 
-	DateTime get dob => _dob;
+	String get dob => _dob;
 
-	set dob(DateTime value) {
+	set dob(String value) {
 		_dob = value;
 	}
 
@@ -81,8 +81,8 @@ class Student {
 		_regNo = value;
 	}
 
-	Map<String, dynamic> toMap() {
-		Map<String, dynamic> map;
+	Map<String, String> toMap() {
+		var map = Map<String, String>();
 		map['regNo'] =_regNo;
 		map['pass'] = _pass;
 		map['name'] = _name;
