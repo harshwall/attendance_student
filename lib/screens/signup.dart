@@ -86,7 +86,7 @@ class SignUpState extends State<SignUp> {
                       padding: EdgeInsets.only(top: 60.0),
                       child: IconButton(
                         icon: Icon(
-                          Icons.cloud_upload,
+                          Icons.edit,
                           size: 30.0,
                         ),
                         onPressed: () {

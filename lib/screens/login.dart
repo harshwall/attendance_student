@@ -1,4 +1,5 @@
 import 'package:attendance_student/classes/student.dart';
+import 'package:attendance_student/screens/dashboard.dart';
 import 'package:attendance_student/screens/signup.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -86,15 +87,7 @@ class LoginState extends State<Login> {
                           if (_loginForm.currentState.validate()) {
                             _loginForm.currentState.save();
 
-                            Fluttertoast.showToast(
-                                msg: student.regNo,
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.CENTER,
-                                timeInSecForIos: 1,
-                                backgroundColor: Colors.red,
-                                textColor: Colors.white,
-                                fontSize: 16.0
-                            );
+
 //                            check = checkLogin(incoming);
 //                            if(check==true)
 //                              student=incoming;
@@ -110,22 +103,51 @@ class LoginState extends State<Login> {
                                 incoming.documentId = docs.documents[0].documentID;
                                 check=true;
                                 student = incoming;
+
+                                Fluttertoast.showToast(
+                                    msg: 'in try',
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.CENTER,
+                                    timeInSecForIos: 1,
+                                    backgroundColor: Colors.red,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0
+                                );
+
+                                Navigator.pop(context);
+
+                                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                  return Dashboard(student);
+                                }));
+
+
                               }
                               catch(e){
                                 check=false;
+                                Fluttertoast.showToast(
+                                    msg: 'in catch',
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.CENTER,
+                                    timeInSecForIos: 1,
+                                    backgroundColor: Colors.red,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0
+                                );
                               }
                              setState(() {
 
                              });
-                             Fluttertoast.showToast(
-                                 msg: check.toString()+'  '+student.documentId,
-                                 toastLength: Toast.LENGTH_SHORT,
-                                 gravity: ToastGravity.CENTER,
-                                 timeInSecForIos: 1,
-                                 backgroundColor: Colors.red,
-                                 textColor: Colors.white,
-                                 fontSize: 16.0
-                             );
+
+
+//                             Fluttertoast.showToast(
+//                                 msg: check.toString()+'  '+student.documentId,
+//                                 toastLength: Toast.LENGTH_SHORT,
+//                                 gravity: ToastGravity.CENTER,
+//                                 timeInSecForIos: 1,
+//                                 backgroundColor: Colors.red,
+//                                 textColor: Colors.white,
+//                                 fontSize: 16.0
+//                             );
                           });
                           }
 
