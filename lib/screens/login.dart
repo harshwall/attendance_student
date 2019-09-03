@@ -116,9 +116,7 @@ class LoginState extends State<Login> {
 
                                 Navigator.pop(context);
 
-                                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                                  return Dashboard(student);
-                                }));
+                                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => Dashboard(student)), (Route<dynamic> route) => false);
 
 
                               }

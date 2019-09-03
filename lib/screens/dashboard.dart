@@ -1,7 +1,10 @@
+import 'package:attendance_student/classes/attendance.dart';
 import 'package:attendance_student/classes/student.dart';
 import 'package:attendance_student/classes/subject.dart';
+import 'package:attendance_student/screens/history.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class Dashboard extends StatefulWidget {
 
@@ -21,7 +24,7 @@ class DashboardState extends State<Dashboard> {
 
 	Student _student;
 
-	List<Subject> subjects;
+
 
 	DashboardState(this._student);
 
@@ -114,9 +117,33 @@ class DashboardState extends State<Dashboard> {
 		var listView = ListView.builder(itemBuilder: (context, index) {
 			if(index<snapshot.data.documents.length) {
 				var doc = snapshot.data.documents[index];
-				return ListTile(
-					title: Text(doc.data['subjectId']),
-					subtitle: Text(doc.data['teacherId']),
+				Subject subject = Subject.fromMapObject(doc);
+				subject.documentId = doc.documentID;
+				subject.studentDocumentId = _student.documentId;
+				return GestureDetector(
+					onTap: () {
+
+						Fluttertoast.showToast(
+							msg: subject.subjectId+' '+subject.teacherId+ ' '+ subject.subjectName+ ' '+ subject.documentId,
+							toastLength: Toast.LENGTH_SHORT,
+							gravity: ToastGravity.CENTER,
+							timeInSecForIos: 1,
+							backgroundColor: Colors.red,
+							textColor: Colors.white,
+							fontSize: 16.0
+						);
+
+						Navigator.push(context, MaterialPageRoute(builder: (context) {
+							return History(subject);
+						}));
+
+					},
+					child: Card(
+						child: ListTile(
+							title: Text(subject.subjectId),
+							subtitle: Text(subject.subjectName),
+						),
+					),
 				);
 			}
 		});
