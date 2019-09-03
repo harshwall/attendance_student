@@ -1,14 +1,16 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:attendance_student/classes/student.dart';
+import 'package:attendance_student/services/password.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:intl/intl.dart';
 import 'package:validators/validators.dart';
-import 'package:password/password.dart';
+//import 'package:password/password.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:password_hash/password_hash.dart';
 
 
 
@@ -30,7 +32,7 @@ class SignUpState extends State<SignUp> {
 
   int _genderValue = 0;
 
-  final algorithm = PBKDF2();
+//  final algorithm = PBKDF2();
 
   final dateFormat = DateFormat("yyyy-MM-dd");
   DateTime dateTime = DateTime.now();
@@ -136,7 +138,7 @@ class SignUpState extends State<SignUp> {
                   child: TextFormField(
                     obscureText: true,
                     onSaved: (value) {
-                      student.pass = Password.hash(value, algorithm);
+                      student.pass = Password.getHash(value);
                     },
                     validator: (String value) {
                       if (value.length<6 || _passKey.currentState.value != value )
@@ -157,10 +159,10 @@ class SignUpState extends State<SignUp> {
                       student.regNo = value;
                     },
                     validator: (String value) {
-                      if (value.length!=8) return 'Enter Registeration Number';
+                      if (value.length!=8) return 'Enter Registration Number';
                     },
                     decoration: InputDecoration(
-                        labelText: 'Registeration Number',
+                        labelText: 'Registration Number',
                         errorStyle: TextStyle(color: Colors.yellow),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5.0))),

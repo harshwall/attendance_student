@@ -1,11 +1,11 @@
 import 'package:attendance_student/classes/student.dart';
-import 'package:attendance_student/screens/dashboard.dart';
 import 'package:attendance_student/screens/signup.dart';
+import 'package:attendance_student/services/firestorecrud.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:password/password.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:loading/loading.dart';
+
 
 class Login extends StatefulWidget {
   @override
@@ -19,8 +19,9 @@ class LoginState extends State<Login> {
 
   Student student = Student.blank();
   String inputPass="";
+  bool isLoading=false;
 
-  final algorithm = PBKDF2();
+//  final algorithm = PBKDF2();
 
   @override
   Widget build(BuildContext context) {
@@ -76,80 +77,24 @@ class LoginState extends State<Login> {
                   Padding(
                     padding: EdgeInsets.all(10.0),
                     child: RaisedButton(
-                        child: Text('Login'),
+                        child: isLoading?Loading():Text('Login'),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30.0),
                         ),
                         elevation: 20.0,
                         onPressed: () {
-
-                          bool check=false;
                           if (_loginForm.currentState.validate()) {
                             _loginForm.currentState.save();
-
-
-//                            check = checkLogin(incoming);
-//                            if(check==true)
-//                              student=incoming;
-
-
-                          Firestore.instance.collection('stud')
-                            .where('regNo', isEqualTo: student.regNo)
-                            .where('pass', isEqualTo: Password.hash(inputPass, algorithm))
-                            .getDocuments()
-                            .then((QuerySnapshot docs) {
-                              try {
-                                incoming = Student.fromMapObject(docs.documents[0].data);
-                                incoming.documentId = docs.documents[0].documentID;
-                                check=true;
-                                student = incoming;
-
-                                Fluttertoast.showToast(
-                                    msg: 'in try',
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.CENTER,
-                                    timeInSecForIos: 1,
-                                    backgroundColor: Colors.red,
-                                    textColor: Colors.white,
-                                    fontSize: 16.0
-                                );
-
-                                Navigator.pop(context);
-
-                                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => Dashboard(student)), (Route<dynamic> route) => false);
-
-
-                              }
-                              catch(e){
-                                check=false;
-                                Fluttertoast.showToast(
-                                    msg: 'in catch',
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.CENTER,
-                                    timeInSecForIos: 1,
-                                    backgroundColor: Colors.red,
-                                    textColor: Colors.white,
-                                    fontSize: 16.0
-                                );
-                              }
-                             setState(() {
-
-                             });
-
-
-//                             Fluttertoast.showToast(
-//                                 msg: check.toString()+'  '+student.documentId,
-//                                 toastLength: Toast.LENGTH_SHORT,
-//                                 gravity: ToastGravity.CENTER,
-//                                 timeInSecForIos: 1,
-//                                 backgroundColor: Colors.red,
-//                                 textColor: Colors.white,
-//                                 fontSize: 16.0
-//                             );
-                          });
+                            setState(() {
+                              isLoading=true;
+                            });
+                            FirestoreCRUD.login(context, incoming, student, inputPass).then((bool b){
+                              print("See b is printed here  "+b.toString());
+                              setState(() {
+                                isLoading=b;
+                              });
+                            });
                           }
-
-
                         }),
                   ),
                   Padding(
