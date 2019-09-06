@@ -45,11 +45,10 @@ class DashboardState extends State<Dashboard> {
 									pinned: true,
 									flexibleSpace: FlexibleSpaceBar(
 										centerTitle: true,
-
 										title: Text('Dashboard'),
 										background: Card(
 											child: Row(
-												mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+												mainAxisAlignment: MainAxisAlignment.spaceAround,
 												children: <Widget>[
 													Align(
 														alignment: Alignment.center,
@@ -61,7 +60,7 @@ class DashboardState extends State<Dashboard> {
 																	width: 100.0,
 																	height: 100.0,
 																	child: Image.network(
-																		"https://www.google.co.in/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png",
+																		"https://d2x5ku95bkycr3.cloudfront.net/App_Themes/Common/images/profile/0_200.png",
 																		fit: BoxFit.fill,
 																	),
 																),
@@ -69,13 +68,28 @@ class DashboardState extends State<Dashboard> {
 														),
 
 													),
-													Container(
-														child: Card(
-															child: Text(
-																_student.name,
-																textScaleFactor: 1.5,
-															),
-														),
+													Column(
+														mainAxisAlignment: MainAxisAlignment.center,
+														children: <Widget>[
+															Container(
+																	child:Text(
+																			_student.name,
+																			textScaleFactor: 1.5,
+																		),
+																),
+															Container(
+																	child: Text(
+																			_student.regNo,
+																			textScaleFactor: 1.5,
+																		),
+																),
+															Container(
+																	child: Text(
+																			"IT B",
+																			textScaleFactor: 1.5,
+																		),
+																	),
+														],
 													)
 												]
 
