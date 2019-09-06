@@ -2,17 +2,14 @@ import 'dart:async';
 import 'dart:io';
 import 'package:attendance_student/classes/student.dart';
 import 'package:attendance_student/services/password.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:attendance_student/services/toast.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:intl/intl.dart';
 import 'package:validators/validators.dart';
-//import 'package:password/password.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:password_hash/password_hash.dart';
-
-
+import 'package:attendance_student/services/firestorecrud.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -31,8 +28,6 @@ class SignUpState extends State<SignUp> {
   File _image;
 
   int _genderValue = 0;
-
-//  final algorithm = PBKDF2();
 
   final dateFormat = DateFormat("yyyy-MM-dd");
   DateTime dateTime = DateTime.now();
@@ -75,10 +70,9 @@ class SignUpState extends State<SignUp> {
                             child: (_image!=null)?
                             Image.file(_image,fit: BoxFit.fill):
                             Image.network(
-                              "https://www.google.co.in/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png",
+                              "https://d2x5ku95bkycr3.cloudfront.net/App_Themes/Common/images/profile/0_200.png",
                               fit: BoxFit.fill,
                             ),
-
                           ),
                         ),
                       ),
@@ -346,27 +340,17 @@ class SignUpState extends State<SignUp> {
                       ),
                       onPressed: () {
                         setState(() {
-                          if(_signUpForm.currentState.validate() ) {
+                          if(_image!=null  && _signUpForm.currentState.validate()) {
                             _signUpForm.currentState.save();
                             student.gender = genderToString(_genderValue);
                             student.category = _currentCategorySelected;
-                            uploadPic(context);
-
-//                        Fluttertoast.showToast(
-//                            msg: student.name+' '+student.regNo+' '+student.pass+' '
-//                                +student.father+' '+student.gender+' '+student.category+' '
-//                                +student.dob+' '+student.email+' '+student.mobile,
-//                            toastLength: Toast.LENGTH_SHORT,
-//                            gravity: ToastGravity.CENTER,
-//                            timeInSecForIos: 1,
-//                            backgroundColor: Colors.red,
-//                            textColor: Colors.white,
-//                            fontSize: 16.0
-//                        );
-
-                            Firestore.instance.collection('stud').add(student.toMap());
-                            Navigator.of(context).pop();
+                            uploadPic(context); //Responsible for returning to Login
+                            FirestoreCRUD.signUp(student);
                           }
+                          else if(_image==null){
+                            toast('Select an image');
+                          }
+
                         });
                       },
                     ),
@@ -377,7 +361,6 @@ class SignUpState extends State<SignUp> {
                     )
                   ],
                 )
-
               ],
             ),
           ),
@@ -412,9 +395,8 @@ class SignUpState extends State<SignUp> {
     StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child(fileName);
     StorageUploadTask uploadTask = firebaseStorageRef.putFile(_image);
     StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
-    setState(() {
-      Scaffold.of(context).showSnackBar(SnackBar(content: Text('Image Uploaded Successfully'),));
-    });
+    toast('Registered successfully');
+    Navigator.of(context).pop();
   }
 
 

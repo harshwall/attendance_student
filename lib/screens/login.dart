@@ -1,9 +1,8 @@
 import 'package:attendance_student/classes/student.dart';
 import 'package:attendance_student/screens/signup.dart';
 import 'package:attendance_student/services/firestorecrud.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:loading/indicator/ball_pulse_indicator.dart';
 import 'package:loading/loading.dart';
 
 
@@ -77,22 +76,21 @@ class LoginState extends State<Login> {
                   Padding(
                     padding: EdgeInsets.all(10.0),
                     child: RaisedButton(
-                        child: isLoading?Loading():Text('Login'),
+                        child: isLoading?Loading(indicator: BallPulseIndicator(), size: 20.0):Text('Login'),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30.0),
                         ),
                         elevation: 20.0,
                         onPressed: () {
-                          if (_loginForm.currentState.validate()) {
+                          if (_loginForm.currentState.validate() && isLoading==false) {
                             _loginForm.currentState.save();
+                            //starting to load
                             setState(() {
                               isLoading=true;
                             });
-                            FirestoreCRUD.login(context, incoming, student, inputPass)
-                                .then((b){
-                              print("See b is printed here  "+b.toString());
+                            FirestoreCRUD.login(context, incoming, student, inputPass).then((void v){
                               setState(() {
-                                isLoading=b;
+                                isLoading=false;
                               });
                             });
                           }
@@ -101,15 +99,12 @@ class LoginState extends State<Login> {
                   Padding(
                     padding: EdgeInsets.all(10.0),
                     child: RaisedButton(
-                      child: Text(
-                        'New User? Sign Up',
-                        style: TextStyle(color: Colors.black),
-                      ),
+                      child: Text('New User? Sign Up',style: TextStyle(color: Colors.black)),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30.0),
                       ),
                       color: Colors.white,
-                      onPressed: () {
+                      onPressed: isLoading?null:() {
                         Navigator.push(context, MaterialPageRoute(builder: (context) {
                           return SignUp();
                         }));
