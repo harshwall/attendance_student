@@ -25,7 +25,6 @@ class LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
 
-    Student incoming = Student.blank();
 
     return Scaffold(
         appBar: AppBar(
@@ -88,9 +87,9 @@ class LoginState extends State<Login> {
                             setState(() {
                               _isLoading=true;
                             });
-                            FirestoreCRUD.login(context, incoming, student, inputPass).then((void v){
+                            FirestoreCRUD.login(context,student, inputPass).then((bool value){
                               setState(() {
-                                _isLoading=false;
+                                _isLoading=value;
                               });
                             });
                           }

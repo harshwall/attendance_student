@@ -16,22 +16,27 @@ class FirestoreCRUD{
 
 
     //This function is called for login
-    static Future<void> login(BuildContext context,Student incoming,Student student,inputPass) async {
+    static Future<bool> login(BuildContext context,Student student,inputPass) async {
+
+      Student incoming = Student.blank();
+      bool value=false;
       await FirestoreCRUD.getDocsForLogin(student,inputPass)
         .then((QuerySnapshot docs) {
         try {
           incoming = Student.fromMapObject(docs.documents[0].data);
           incoming.documentId = docs.documents[0].documentID;
           student = incoming;
+          value=true;
           Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => Dashboard(student)), (Route<dynamic> route) => false);
 
         }
         catch(e){
           toast('Wrong credentials');
           print(e);
+          value=false;
         }
       });
-      return;
+      return value;
     }
 
     //This function is for sign up
