@@ -88,7 +88,8 @@ class LoginState extends State<Login> {
                             setState(() {
                               isLoading=true;
                             });
-                            FirestoreCRUD.login(context, incoming, student, inputPass).then((bool b){
+                            FirestoreCRUD.login(context, incoming, student, inputPass)
+                                .then((b){
                               print("See b is printed here  "+b.toString());
                               setState(() {
                                 isLoading=b;

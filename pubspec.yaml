@@ -28,6 +28,7 @@ dependencies:
   datetime_picker_formfield: ^0.4.2
   validators: ^2.0.0+1
   loading: ^1.0.1
+  password:
 
 
   # The following adds the Cupertino Icons font to your application.
