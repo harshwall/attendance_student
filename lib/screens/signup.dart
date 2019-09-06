@@ -342,16 +342,26 @@ class SignUpState extends State<SignUp> {
                           borderRadius: BorderRadius.circular(30.0)
                       ),
                       onPressed: () {
-                        setState(() {
+
                           if(_image!=null  && _signUpForm.currentState.validate() && _isLoading==false) {
-                            _isLoading=true;
+                            setState(() {
+                              _isLoading = true;
+                            });
                             _signUpForm.currentState.save();
                             student.gender = genderToString(_genderValue);
                             student.category = _currentCategorySelected;
-                            uploadPic().then((void v){
-                              _isLoading=false;
-                            }); //Responsible for returning to Login
-                            FirestoreCRUD.signUp(student);
+
+                            //Method made signUp if new user
+                            FirestoreCRUD.signUp(student,_image).then((bool b){
+                              if(b==true){
+                                toast('Registered successfully');
+                                Navigator.of(context).pop();
+                              }
+                              else
+                              setState(() {
+                                _isLoading = false;
+                              });
+                            });
                           }
                           else if(_image==null){
                             toast('Select an image');
@@ -360,7 +370,6 @@ class SignUpState extends State<SignUp> {
                             toast("Please wait");
                           }
 
-                        });
                       },
                     ),
                     Expanded(
@@ -399,14 +408,7 @@ class SignUpState extends State<SignUp> {
     });
   }
 
-  Future uploadPic() async {
-    String fileName = student.regNo;
-    StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child(fileName);
-    StorageUploadTask uploadTask = firebaseStorageRef.putFile(_image);
-    StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
-    toast('Registered successfully');
-    Navigator.of(context).pop();
-  }
+
 
 
 

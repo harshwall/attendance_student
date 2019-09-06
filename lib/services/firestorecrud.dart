@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:attendance_student/classes/student.dart';
 import 'package:attendance_student/screens/dashboard.dart';
 import 'package:attendance_student/services/password.dart';
 import 'package:attendance_student/services/toast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -40,11 +43,28 @@ class FirestoreCRUD{
     }
 
     //This function is for sign up
-    static Future<void> signUp(Student student) async {
-      student.pass=await compute(Password.getHash,student.pass);
-      await Firestore.instance.collection('stud').add(student.toMap());
-      return;
+    static Future<bool> signUp(Student student,File _image) async {
+      int length=0;
 
+      //checking if user already exists
+      await Firestore.instance.collection('stud').where('regNo',isEqualTo: student.regNo).getDocuments().then((QuerySnapshot docs){
+        length=docs.documents.length;
+      });
+      if(length>0) {
+        toast('User already exists. Please login');
+        return false;
+      }
+      student.pass=await compute(Password.getHash,student.pass);
+      await uploadPic(student,_image);
+      await Firestore.instance.collection('stud').add(student.toMap());
+      return true;
+
+    }
+    static Future uploadPic(Student student,File _image) async {
+      String fileName = student.regNo;
+      StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child(fileName);
+      StorageUploadTask uploadTask = firebaseStorageRef.putFile(_image);
+      StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
     }
 
 }
