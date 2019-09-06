@@ -36,7 +36,9 @@ class FirestoreCRUD{
 
     //This function is for sign up
     static Future<void> signUp(Student student) async {
-      return await Firestore.instance.collection('stud').add(student.toMap());
+      student.pass=await compute(Password.getHash,student.pass);
+      await Firestore.instance.collection('stud').add(student.toMap());
+      return;
 
     }
 

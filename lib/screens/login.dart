@@ -18,7 +18,7 @@ class LoginState extends State<Login> {
 
   Student student = Student.blank();
   String inputPass="";
-  bool isLoading=false;
+  bool _isLoading=false;
 
 //  final algorithm = PBKDF2();
 
@@ -76,21 +76,21 @@ class LoginState extends State<Login> {
                   Padding(
                     padding: EdgeInsets.all(10.0),
                     child: RaisedButton(
-                        child: isLoading?Loading(indicator: BallPulseIndicator(), size: 20.0):Text('Login'),
+                        child: _isLoading?Loading(indicator: BallPulseIndicator(), size: 20.0):Text('Login'),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30.0),
                         ),
                         elevation: 20.0,
                         onPressed: () {
-                          if (_loginForm.currentState.validate() && isLoading==false) {
+                          if (_loginForm.currentState.validate() && _isLoading==false) {
                             _loginForm.currentState.save();
                             //starting to load
                             setState(() {
-                              isLoading=true;
+                              _isLoading=true;
                             });
                             FirestoreCRUD.login(context, incoming, student, inputPass).then((void v){
                               setState(() {
-                                isLoading=false;
+                                _isLoading=false;
                               });
                             });
                           }
@@ -104,7 +104,7 @@ class LoginState extends State<Login> {
                         borderRadius: BorderRadius.circular(30.0),
                       ),
                       color: Colors.white,
-                      onPressed: isLoading?null:() {
+                      onPressed: _isLoading?null:() {
                         Navigator.push(context, MaterialPageRoute(builder: (context) {
                           return SignUp();
                         }));

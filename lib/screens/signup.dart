@@ -7,6 +7,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:intl/intl.dart';
+import 'package:loading/indicator/ball_pulse_indicator.dart';
+import 'package:loading/loading.dart';
 import 'package:validators/validators.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:attendance_student/services/firestorecrud.dart';
@@ -28,6 +30,7 @@ class SignUpState extends State<SignUp> {
   File _image;
 
   int _genderValue = 0;
+  bool _isLoading=false;
 
   final dateFormat = DateFormat("yyyy-MM-dd");
   DateTime dateTime = DateTime.now();
@@ -85,7 +88,7 @@ class SignUpState extends State<SignUp> {
                           Icons.edit,
                           size: 30.0,
                         ),
-                        onPressed: () {
+                        onPressed: _isLoading?null:() {
                           getImage();
                         },
                       ),
@@ -132,11 +135,11 @@ class SignUpState extends State<SignUp> {
                   child: TextFormField(
                     obscureText: true,
                     onSaved: (value) {
-                      student.pass = Password.getHash(value);
+                      student.pass = value;
                     },
                     validator: (String value) {
                       if (value.length<6 || _passKey.currentState.value != value )
-                        return "Passwords doesn't match";
+                        return "Passwords don't match";
                     },
                     decoration: InputDecoration(
                         labelText: 'Confirm Password',
@@ -334,21 +337,27 @@ class SignUpState extends State<SignUp> {
                       ),
                     ),
                     RaisedButton(
-                      child: Text('Submit'),
+                      child: _isLoading?Loading(indicator: BallPulseIndicator(), size: 20.0):Text('Submit'),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30.0)
                       ),
                       onPressed: () {
                         setState(() {
-                          if(_image!=null  && _signUpForm.currentState.validate()) {
+                          if(_image!=null  && _signUpForm.currentState.validate() && _isLoading==false) {
+                            _isLoading=true;
                             _signUpForm.currentState.save();
                             student.gender = genderToString(_genderValue);
                             student.category = _currentCategorySelected;
-                            uploadPic(context); //Responsible for returning to Login
+                            uploadPic().then((void v){
+                              _isLoading=false;
+                            }); //Responsible for returning to Login
                             FirestoreCRUD.signUp(student);
                           }
                           else if(_image==null){
                             toast('Select an image');
+                          }
+                          else if(_isLoading){
+                            toast("Please wait");
                           }
 
                         });
@@ -390,7 +399,7 @@ class SignUpState extends State<SignUp> {
     });
   }
 
-  Future uploadPic(BuildContext context) async {
+  Future uploadPic() async {
     String fileName = student.regNo;
     StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child(fileName);
     StorageUploadTask uploadTask = firebaseStorageRef.putFile(_image);
