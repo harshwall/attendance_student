@@ -44,6 +44,8 @@ class SignUpState extends State<SignUp> {
     _currentCategorySelected = categoryList[0];
   }
 
+
+  //UI part of sign up
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -343,10 +345,15 @@ class SignUpState extends State<SignUp> {
                       ),
                       onPressed: () {
 
+
+                        //The Sign Up button checks for below parameters
+
                           if(_image!=null  && _signUpForm.currentState.validate() && _isLoading==false) {
                             setState(() {
                               _isLoading = true;
                             });
+
+                            //forms state is saved
                             _signUpForm.currentState.save();
                             student.gender = genderToString(_genderValue);
                             student.category = _currentCategorySelected;
@@ -387,6 +394,7 @@ class SignUpState extends State<SignUp> {
     );
   }
 
+
   String genderToString(int no) {
     switch(no) {
       case 0:
@@ -398,6 +406,8 @@ class SignUpState extends State<SignUp> {
     }
   }
 
+
+  //fetches image from gallery
   Future getImage() async {
     var image = await ImagePicker.pickImage(
       source: ImageSource.gallery

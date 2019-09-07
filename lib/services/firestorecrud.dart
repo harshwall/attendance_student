@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 
 class FirestoreCRUD{
     //  This function looks for the document for login
+
     static Future<QuerySnapshot> getDocsForLogin(Student student,String inputPass) async {
       return await Firestore.instance.collection('stud')
           .where('regNo', isEqualTo: student.regNo)
@@ -19,6 +20,7 @@ class FirestoreCRUD{
 
 
     //This function is called for login
+
     static Future<bool> login(BuildContext context,Student student,inputPass) async {
 
       Student incoming = Student.blank();
@@ -43,6 +45,7 @@ class FirestoreCRUD{
     }
 
     //This function is for sign up
+
     static Future<bool> signUp(Student student,File _image) async {
       int length=0;
 
@@ -60,6 +63,9 @@ class FirestoreCRUD{
       return true;
 
     }
+
+    //This function uploads the image
+
     static Future uploadPic(Student student,File _image) async {
       String fileName = student.regNo;
       StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child(fileName);

@@ -1,4 +1,3 @@
-
 class Attendance {
 
 	String _date;
@@ -42,6 +41,7 @@ class Attendance {
 		_subjectDocumentId = value;
 	}
 
+	//toMap method is used to insert data in firestore
 	Map<String, String> toMap() {
 		var map = Map<String, String>();
 		map['date'] = _date;
@@ -49,6 +49,7 @@ class Attendance {
 		return map;
 	}
 
+	//fromMapObject is used to define Attendance instance after fetching data
 	Attendance.fromMapObject(var doc) {
 		this._date = doc.data['date'];
 		this._outcome = doc.data['outcome'];

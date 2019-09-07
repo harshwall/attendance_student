@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+//Class to uniquely create a subject in firestore
+
 class Subject {
 
 	String _subjectId;
@@ -44,6 +46,8 @@ class Subject {
 		_studentDocumentId = value;
 	}
 
+	//toMap method inserts data in firestore
+
 	Map<String, String> toMap() {
 		var map = Map<String, String>();
 		map['subjectId'] = _subjectId;
@@ -51,6 +55,8 @@ class Subject {
 		map['subjectName'] = _subjectName;
 		return map;
 	}
+
+	//fromMapObject method is used to define student after data is fetched from Firebase
 
 	Subject.fromMapObject(var doc) {
 		this._subjectId = doc.data['subjectId'];

@@ -2,6 +2,7 @@ import 'package:attendance_student/classes/attendance.dart';
 import 'package:attendance_student/classes/student.dart';
 import 'package:attendance_student/classes/subject.dart';
 import 'package:attendance_student/screens/history.dart';
+import 'package:attendance_student/services/toast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -27,6 +28,8 @@ class DashboardState extends State<Dashboard> {
 
 
 	DashboardState(this._student);
+
+	//UI part of the dashboard starts
 
 	@override
 	Widget build(BuildContext context) {
@@ -102,8 +105,15 @@ class DashboardState extends State<Dashboard> {
 
 					];
 				},
+					//The dynnamic card view appBar ends here
+
+
+					//Body shows the list of subjects student has
 				body: getSubjects()
 			),
+
+
+			//Floating action button to join new class
 			floatingActionButton: FloatingActionButton(
 				child: Icon(Icons.add),
 				onPressed: () {
@@ -114,7 +124,9 @@ class DashboardState extends State<Dashboard> {
 			),
 		);
 	}
-	
+
+
+	//Fetches subjects of th estudent fom the database
 	Widget getSubjects() {
 		return StreamBuilder<QuerySnapshot> (
 			stream: Firestore.instance.collection('stud').document(_student.documentId).collection('subject').snapshots(),
@@ -126,6 +138,8 @@ class DashboardState extends State<Dashboard> {
 		);
 	}
 
+
+	//This method returns a list view of subjects
   getSubjectList(AsyncSnapshot<QuerySnapshot> snapshot) {
 
 		var listView = ListView.builder(itemBuilder: (context, index) {
@@ -137,16 +151,10 @@ class DashboardState extends State<Dashboard> {
 				return GestureDetector(
 					onTap: () {
 
-						Fluttertoast.showToast(
-							msg: subject.subjectId+' '+subject.teacherId+ ' '+ subject.subjectName+ ' '+ subject.documentId,
-							toastLength: Toast.LENGTH_SHORT,
-							gravity: ToastGravity.CENTER,
-							timeInSecForIos: 1,
-							backgroundColor: Colors.red,
-							textColor: Colors.white,
-							fontSize: 16.0
-						);
 
+						//Simple toast
+
+						toast(subject.subjectId+' '+subject.teacherId+ ' '+ subject.subjectName+ ' '+ subject.documentId);
 						Navigator.push(context, MaterialPageRoute(builder: (context) {
 							return History(subject);
 						}));
@@ -162,16 +170,6 @@ class DashboardState extends State<Dashboard> {
 			}
 		});
 
-//		List<ListTile> temp = snapshot.data.documents
-//			.map((doc) {
-//				ListTile(
-//					title: Text(doc.data['subjectId']),
-//					subtitle: Text(doc.data['teacherId']),
-//			);
-//				debugPrint(doc.data['subjectId']);
-//				debugPrint(doc.documentID);
-//			})
-//			.toList();
 		return listView;
   }
 }

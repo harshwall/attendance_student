@@ -81,6 +81,8 @@ class Student {
 		_regNo = value;
 	}
 
+	//toMap method inserts data in firestore
+
 	Map<String, String> toMap() {
 		var map = Map<String, String>();
 		map['regNo'] =_regNo;
@@ -95,6 +97,8 @@ class Student {
 
 		return map;
 	}
+
+	//fromMapObject method is used to define student after data is fetched from Firebase
 
 	Student.fromMapObject(Map<String, dynamic> map) {
 		this._regNo = map['regNo'];

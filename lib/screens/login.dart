@@ -20,7 +20,8 @@ class LoginState extends State<Login> {
   String inputPass="";
   bool _isLoading=false;
 
-//  final algorithm = PBKDF2();
+
+  //UI part of Login
 
   @override
   Widget build(BuildContext context) {
@@ -83,10 +84,13 @@ class LoginState extends State<Login> {
                         onPressed: () {
                           if (_loginForm.currentState.validate() && _isLoading==false) {
                             _loginForm.currentState.save();
+
                             //starting to load
                             setState(() {
                               _isLoading=true;
                             });
+
+                            //An async is called to verify login
                             FirestoreCRUD.login(context,student, inputPass).then((bool value){
                               setState(() {
                                 _isLoading=value;
@@ -104,6 +108,8 @@ class LoginState extends State<Login> {
                       ),
                       color: Colors.white,
                       onPressed: _isLoading?null:() {
+
+                        //Button shows the signup screen
                         Navigator.push(context, MaterialPageRoute(builder: (context) {
                           return SignUp();
                         }));

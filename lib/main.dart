@@ -16,16 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         brightness: Brightness.dark,
       ),
-      home: Login(),
-//      home: Scaffold(
-//        appBar: AppBar(
-//          backgroundColor: Colors.black,
-//          title:Text(
-//            "Hello World!",
-//          )
-//        ),
-//        body: ,
-//      )
+      home: Login(),//Currently user is directly thrown to the login page. Shared preferences will be checked here
     );
   }
 }

@@ -29,6 +29,8 @@ class _HistoryState extends State<History> {
 	);
   }
 
+
+  //It returns the stream builder of that particular subject after running firebase queries.
   Widget getHistory() {
   	return StreamBuilder<QuerySnapshot> (
 		stream: Firestore.instance.collection('stud').document(_subject.studentDocumentId).collection('subject').document(_subject.documentId).collection('attendance').orderBy("date", descending: true).snapshots(),
@@ -40,6 +42,7 @@ class _HistoryState extends State<History> {
 	);
   }
 
+  //returns the attendance as a list view
   getHistoryList(AsyncSnapshot<QuerySnapshot> snapshot) {
 
 		var listView = ListView.builder(itemBuilder: (context, index) {
