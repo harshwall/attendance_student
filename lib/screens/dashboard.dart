@@ -2,6 +2,7 @@ import 'package:attendance_student/classes/attendance.dart';
 import 'package:attendance_student/classes/student.dart';
 import 'package:attendance_student/classes/subject.dart';
 import 'package:attendance_student/screens/history.dart';
+import 'package:attendance_student/screens/joinclass.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -107,7 +108,9 @@ class DashboardState extends State<Dashboard> {
 			floatingActionButton: FloatingActionButton(
 				child: Icon(Icons.add),
 				onPressed: () {
-
+					Navigator.push(context, MaterialPageRoute(builder: (context) {
+						return JoinClass(_student);
+					}));
 				},
 				tooltip: 'Join New Class',
 				backgroundColor: Colors.blueAccent,
