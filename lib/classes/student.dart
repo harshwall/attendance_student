@@ -4,7 +4,7 @@ class Student {
 	String _regNo;
 	String _pass;
 	String _name;
-	String _father;
+	String _classId;
 	String _gender;
 	String _category;
 	String _dob;
@@ -17,7 +17,7 @@ class Student {
 
 	Student.blank();
 
-	Student(this._regNo, this._pass, this._name, this._father, this._gender,
+	Student(this._regNo, this._pass, this._name, this._classId, this._gender,
 		this._category, this._dob, this._email, this._mobile);
 
 	String get mobile => _mobile;
@@ -57,10 +57,10 @@ class Student {
 		_gender = value;
 	}
 
-	String get father => _father;
+	String get classId => _classId;
 
-	set father(String value) {
-		_father = value;
+	set classId(String value) {
+		_classId = value;
 	}
 
 	String get name => _name;
@@ -88,7 +88,7 @@ class Student {
 		map['regNo'] =_regNo;
 		map['pass'] = _pass;
 		map['name'] = _name;
-		map['father'] = _father;
+		map['classId'] = _classId;
 		map['gender'] = _gender;
 		map['category'] = _category;
 		map['dob'] = _dob;
@@ -104,7 +104,7 @@ class Student {
 		this._regNo = map['regNo'];
 		this._pass = map['pass'];
 		this._name = map['name'];
-		this._father = map['father'];
+		this._classId = map['classId'];
 		this._gender = map['gender'];
 		this._category = map['category'];
 		this._dob = map['dob'];

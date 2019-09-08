@@ -172,13 +172,13 @@ class SignUpState extends State<SignUp> {
                   padding: EdgeInsets.all(5.0),
                   child: TextFormField(
                     onSaved: (value) {
-                      student.father = value;
+                      student.classId = value;
                     },
                     validator: (String value) {
-                      if (value.isEmpty) return "Enter Father's Name";
+                      if (value.length != 5) return "Enter valid Class ID";
                     },
                     decoration: InputDecoration(
-                        labelText: "Father's Name",
+                        labelText: "Class Id",
                         errorStyle: TextStyle(color: Colors.yellow),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5.0))),

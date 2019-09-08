@@ -1,4 +1,5 @@
 import 'package:attendance_student/screens/login.dart';
+import 'package:attendance_student/screens/qrshow.dart';
 import 'package:attendance_student/screens/signup.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

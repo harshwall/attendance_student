@@ -3,8 +3,10 @@ import 'package:attendance_student/classes/student.dart';
 import 'package:attendance_student/classes/subject.dart';
 import 'package:attendance_student/screens/history.dart';
 import 'package:attendance_student/screens/joinclass.dart';
+import 'package:attendance_student/screens/qrshow.dart';
 import 'package:attendance_student/services/toast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 class Dashboard extends StatefulWidget {
@@ -28,6 +30,12 @@ class DashboardState extends State<Dashboard> {
 
 
 	DashboardState(this._student);
+	String _url;
+
+	void initState() {
+		super.initState();
+		getURL();
+	}
 
 	//UI part of the dashboard starts
 
@@ -62,7 +70,8 @@ class DashboardState extends State<Dashboard> {
 																child: SizedBox(
 																	width: 100.0,
 																	height: 100.0,
-																	child: Image.network(
+																	child: _url!=null?Image.network(_url):
+																	Image.network(
 																		"https://d2x5ku95bkycr3.cloudfront.net/App_Themes/Common/images/profile/0_200.png",
 																		fit: BoxFit.fill,
 																	),
@@ -125,6 +134,35 @@ class DashboardState extends State<Dashboard> {
 				tooltip: 'Join New Class',
 				backgroundColor: Colors.blueAccent,
 			),
+
+			drawer: Drawer(
+				child: ListView(
+					children: <Widget>[
+						ListTile(
+							title: Text('Profile'),
+							onTap: () {
+
+							},
+						),
+						ListTile(
+							title: Text('QR Code'),
+							onTap: () {
+								Navigator.pop(context);
+								Navigator.push(context, MaterialPageRoute(builder: (context) {
+									return QrShow(_student);
+								}));
+
+							},
+						),
+						ListTile(
+							title: Text('Sign Out'),
+							onTap: () {
+
+							},
+						)
+					],
+				),
+			),
 		);
 	}
 
@@ -174,5 +212,17 @@ class DashboardState extends State<Dashboard> {
 		});
 
 		return listView;
+  }
+
+  void getURL() async{
+		String url;
+	  StorageReference ref = FirebaseStorage.instance.ref().child(_student.regNo);
+	  url = (await ref.getDownloadURL()).toString();
+	  print(url);
+
+	  setState(() {
+	    _url = url;
+	  });
+
   }
 }
