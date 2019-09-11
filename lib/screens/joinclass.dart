@@ -73,7 +73,6 @@ class _JoinClassState extends State<JoinClass> {
 											});
 											sendCode();
 
-
 										}
 									}),
 							),

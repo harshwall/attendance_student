@@ -11,6 +11,7 @@ class Student {
 	String _email;
 	String _mobile;
 	String _documentId;
+	int _verify;
 
 	Student.loginPage(this._regNo, this._pass);
 
@@ -19,6 +20,13 @@ class Student {
 
 	Student(this._regNo, this._pass, this._name, this._classId, this._gender,
 		this._category, this._dob, this._email, this._mobile);
+
+
+	int get verify => _verify;
+
+	set verify(int value) {
+		_verify = value;
+	}
 
 	String get mobile => _mobile;
 
@@ -83,8 +91,8 @@ class Student {
 
 	//toMap method inserts data in firestore
 
-	Map<String, String> toMap() {
-		var map = Map<String, String>();
+	Map<String, dynamic> toMap() {
+		var map = Map<String, dynamic>();
 		map['regNo'] =_regNo;
 		map['pass'] = _pass;
 		map['name'] = _name;
@@ -94,6 +102,7 @@ class Student {
 		map['dob'] = _dob;
 		map['email'] = _email;
 		map['mobile'] = _mobile;
+		map['verify'] = _verify;
 
 		return map;
 	}
@@ -110,6 +119,7 @@ class Student {
 		this._dob = map['dob'];
 		this._email = map['email'];
 		this._mobile = map['mobile'];
+		this._verify = map['verify'];
 	}
 
 }

@@ -3,6 +3,7 @@ import 'package:attendance_student/classes/student.dart';
 import 'package:attendance_student/classes/subject.dart';
 import 'package:attendance_student/screens/history.dart';
 import 'package:attendance_student/screens/joinclass.dart';
+import 'package:attendance_student/screens/profile.dart';
 import 'package:attendance_student/screens/qrshow.dart';
 import 'package:attendance_student/services/toast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -31,6 +32,10 @@ class DashboardState extends State<Dashboard> {
 
 	DashboardState(this._student);
 	String _url;
+
+
+	int present=0;
+	int absent=0;
 
 	void initState() {
 		super.initState();
@@ -126,9 +131,12 @@ class DashboardState extends State<Dashboard> {
 			floatingActionButton: FloatingActionButton(
 				child: Icon(Icons.add),
 				onPressed: () {
-					Navigator.push(context, MaterialPageRoute(builder: (context) {
-						return JoinClass(_student);
-					}));
+					if(_student.verify ==1)
+						Navigator.push(context, MaterialPageRoute(builder: (context) {
+							return JoinClass(_student);
+						}));
+					else
+						toast('Your profile is not verified');
 
 				},
 				tooltip: 'Join New Class',
@@ -141,7 +149,9 @@ class DashboardState extends State<Dashboard> {
 						ListTile(
 							title: Text('Profile'),
 							onTap: () {
-
+								Navigator.push(context, MaterialPageRoute(builder: (context) {
+									return Profile(_student);
+								}));
 							},
 						),
 						ListTile(
@@ -167,7 +177,7 @@ class DashboardState extends State<Dashboard> {
 	}
 
 
-	//Fetches subjects of th estudent fom the database
+	//Fetches subjects of the student fom the database
 	Widget getSubjects() {
 		return StreamBuilder<QuerySnapshot> (
 			stream: Firestore.instance.collection('stud').document(_student.documentId).collection('subject').snapshots(),
@@ -191,11 +201,6 @@ class DashboardState extends State<Dashboard> {
 				subject.studentDocumentId = _student.documentId;
 				return GestureDetector(
 					onTap: () {
-
-
-						//Simple toast
-
-						toast(subject.subjectId+' '+subject.teacherId+ ' '+ subject.subjectName+ ' '+ subject.documentId);
 						Navigator.push(context, MaterialPageRoute(builder: (context) {
 							return History(subject);
 						}));
@@ -203,8 +208,9 @@ class DashboardState extends State<Dashboard> {
 					},
 					child: Card(
 						child: ListTile(
-							title: Text(subject.subjectId),
-							subtitle: Text(subject.subjectName),
+							title: Text(subject.subjectId+'  '+subject.subjectName),
+							subtitle: Text(subject.teacherId),
+							trailing: getCount(subject),
 						),
 					),
 				);
@@ -213,6 +219,45 @@ class DashboardState extends State<Dashboard> {
 
 		return listView;
   }
+  
+  Widget getCount(Subject subject) {
+		return Container(
+			width: 50,
+			child: Row(
+				children: <Widget>[
+					getPresentCount(subject),
+					Container(
+						width: 10,
+					),
+					getAbsentCount(subject)
+				],
+			),
+		);
+  }
+
+  Widget getPresentCount(Subject subject) {
+		return StreamBuilder<QuerySnapshot>(
+			stream: Firestore.instance.collection('stud').document(_student.documentId).collection('subject').document(subject.documentId).collection('attendance').where('outcome', isEqualTo: 'P').snapshots(),
+			builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+				if(!snapshot.hasData)
+					return Text('0');
+				present = snapshot.data.documents.length;
+				return Text(snapshot.data.documents.length.toString());
+			},
+		);
+  }
+
+	Widget getAbsentCount(Subject subject) {
+		return StreamBuilder<QuerySnapshot>(
+			stream: Firestore.instance.collection('stud').document(_student.documentId).collection('subject').document(subject.documentId).collection('attendance').where('outcome', isEqualTo: 'A').snapshots(),
+			builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+				if(!snapshot.hasData)
+					return Text('0');
+				absent = snapshot.data.documents.length;
+				return Text(snapshot.data.documents.length.toString());
+			},
+		);
+	}
 
   void getURL() async{
 		String url;

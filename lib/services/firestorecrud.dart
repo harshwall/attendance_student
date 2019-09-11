@@ -19,7 +19,7 @@ class FirestoreCRUD{
     }
 
 
-    //This function is called for login
+    //This function is called for loginresults[index].question,
 
     static Future<bool> login(BuildContext context,Student student,inputPass) async {
 
@@ -62,6 +62,18 @@ class FirestoreCRUD{
       await Firestore.instance.collection('stud').add(student.toMap());
       return true;
 
+    }
+
+    static Future<bool> profileUpdate(Student student, File _image, bool newPassword) async {
+      if(newPassword) {
+        await Firestore.instance.collection('stud').document(student.documentId).updateData({'name': student.name, 'pass': student.pass, 'gender': student.gender, 'category': student.category, 'dob': student.dob, 'email': student.email, 'mobile': student.mobile});
+      }
+      else
+        await Firestore.instance.collection('stud').document(student.documentId).updateData({'name': student.name, 'gender': student.gender, 'category': student.category, 'dob': student.dob, 'email': student.email, 'mobile': student.mobile});
+
+      if(_image!=null)
+        await uploadPic(student, _image);
+      return true;
     }
 
     //This function uploads the image

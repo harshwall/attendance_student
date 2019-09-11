@@ -355,6 +355,7 @@ class SignUpState extends State<SignUp> {
 
                             //forms state is saved
                             _signUpForm.currentState.save();
+                            student.verify = 0;
                             student.gender = genderToString(_genderValue);
                             student.category = _currentCategorySelected;
 
