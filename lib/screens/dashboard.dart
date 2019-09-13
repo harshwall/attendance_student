@@ -100,7 +100,7 @@ class DashboardState extends State<Dashboard> {
 																),
 															Container(
 																	child: Text(
-																			"IT B",
+																			_student.classId,
 																			textScaleFactor: 1.5,
 																		),
 																	),
