@@ -34,8 +34,6 @@ class DashboardState extends State<Dashboard> {
 	String _url;
 
 
-	int present=0;
-	int absent=0;
 
 	void initState() {
 		super.initState();
@@ -210,7 +208,18 @@ class DashboardState extends State<Dashboard> {
 						child: ListTile(
 							title: Text(subject.subjectId+'  '+subject.subjectName),
 							subtitle: Text(subject.teacherId),
-							trailing: getCount(subject),
+							trailing: Container(
+								width: 30.0,
+								child: Row(
+									children: <Widget>[
+										Text(subject.present),
+										Container(
+											width: 5.0,
+										),
+										Text(subject.absent)
+									],
+								),
+							)
 						),
 					),
 				);
@@ -219,45 +228,7 @@ class DashboardState extends State<Dashboard> {
 
 		return listView;
   }
-  
-  Widget getCount(Subject subject) {
-		return Container(
-			width: 50,
-			child: Row(
-				children: <Widget>[
-					getPresentCount(subject),
-					Container(
-						width: 10,
-					),
-					getAbsentCount(subject)
-				],
-			),
-		);
-  }
 
-  Widget getPresentCount(Subject subject) {
-		return StreamBuilder<QuerySnapshot>(
-			stream: Firestore.instance.collection('stud').document(_student.documentId).collection('subject').document(subject.documentId).collection('attendance').where('outcome', isEqualTo: 'P').snapshots(),
-			builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-				if(!snapshot.hasData)
-					return Text('0');
-				present = snapshot.data.documents.length;
-				return Text(snapshot.data.documents.length.toString());
-			},
-		);
-  }
-
-	Widget getAbsentCount(Subject subject) {
-		return StreamBuilder<QuerySnapshot>(
-			stream: Firestore.instance.collection('stud').document(_student.documentId).collection('subject').document(subject.documentId).collection('attendance').where('outcome', isEqualTo: 'A').snapshots(),
-			builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-				if(!snapshot.hasData)
-					return Text('0');
-				absent = snapshot.data.documents.length;
-				return Text(snapshot.data.documents.length.toString());
-			},
-		);
-	}
 
   void getURL() async{
 		String url;

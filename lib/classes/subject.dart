@@ -8,11 +8,26 @@ class Subject {
 	String _teacherId;
 	String _subjectName;
 	String _documentId;
+	String _present;
+	String _absent;
 	String _studentDocumentId;
 
 	Subject(this._subjectId, this._teacherId, this._subjectName);
 
 	Subject.blank();
+
+
+	String get present => _present;
+
+	set present(String value) {
+		_present = value;
+	}
+
+	String get absent => _absent;
+
+	set absent(String value) {
+		_absent = value;
+	}
 
 	String get subjectName => _subjectName;
 
@@ -62,6 +77,8 @@ class Subject {
 		this._subjectId = doc.data['subjectId'];
 		this._teacherId = doc.data['teacherId'];
 		this._subjectName = doc.data['subjectName'];
+		this._absent = doc.data['absent'];
+		this._present = doc.data['present'];
 	}
 
 
