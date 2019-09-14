@@ -88,7 +88,7 @@ class _JoinClassState extends State<JoinClass> {
 	void sendCode() async {
 
 		Map<String, String> map = Map<String,String>();
-		map['studentId'] = _student.documentId;
+		map['docId'] = _student.documentId;
 
 		var snapshot = await Firestore.instance.collection('stud').document(_student.documentId).collection('subject').where('subjectId', isEqualTo: _code.substring(8)).where('teacherId', isEqualTo: _code.substring(0,8)).getDocuments();
 
