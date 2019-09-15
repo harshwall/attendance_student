@@ -54,8 +54,27 @@ class _HistoryState extends State<History> {
 				attendance.subjectDocumentId = _subject.documentId;
 				return Card(
 					child: ListTile(
+						leading: attendance.outcome == 'P' ?
+						Container(
+							margin: EdgeInsets.all(15.0),
+							width: 10.0,
+							height: 10.0,
+							decoration: BoxDecoration(
+								shape: BoxShape.circle,
+								color: Colors.green
+							),
+						):
+						Container(
+							margin: EdgeInsets.all(15.0),
+							width: 10.0,
+							height: 10.0,
+							decoration: BoxDecoration(
+								shape: BoxShape.circle,
+								color: Colors.red,
+							),
+						),
 						title: Text(attendance.date),
-						subtitle: Text(attendance.outcome),
+						trailing: Text(attendance.duration+' Hours'),
 					),
 				);
 			}

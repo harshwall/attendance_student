@@ -15,7 +15,8 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        brightness: Brightness.dark,
+        brightness: Brightness.light,
+        primaryColor: Colors.teal,
       ),
       home: Login(),//Currently user is directly thrown to the login page. Shared preferences will be checked here
     );

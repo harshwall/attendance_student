@@ -2,13 +2,26 @@ class Attendance {
 
 	String _date;
 	String _outcome;
+	String _duration;
+	String _time;
 	String _documentId;
 	String _studentDocumentId;
 	String _subjectDocumentId;
 
 	Attendance(this._date, this._outcome);
-
 	Attendance.blank();
+
+	String get duration => _duration;
+
+	set duration(String value) {
+		_duration = value;
+	}
+
+	String get time => _time;
+
+	set time(String value) {
+		_time = value;
+	}
 
 	String get documentId => _documentId;
 
@@ -53,7 +66,11 @@ class Attendance {
 	Attendance.fromMapObject(var doc) {
 		this._date = doc.data['date'];
 		this._outcome = doc.data['outcome'];
+		this._duration = doc.data['duration'];
+		this._time = doc.data['time'];
 	}
+
+
 
 
 }

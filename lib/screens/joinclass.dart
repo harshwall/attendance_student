@@ -48,11 +48,28 @@ class _JoinClassState extends State<JoinClass> {
 											_code = value;
 										},
 										validator: (String value) {
-											if (value.length != 14)
-												return "Code should be of length 14";
+											if (value.length != 8)
+												return "Teacher's ID should be of length 8";
 										},
 										decoration: InputDecoration(
-											labelText: "Joining Code",
+											labelText: "Teacher's ID",
+											errorStyle: TextStyle(color: Colors.yellow),
+											border: OutlineInputBorder(
+												borderRadius: BorderRadius.circular(5.0))),
+									),
+								),
+								Padding(
+									padding: EdgeInsets.all(10.0),
+									child: TextFormField(
+										onSaved: (value) {
+											_code = _code+value;
+										},
+										validator: (String value) {
+											if (value.length != 6)
+												return "Subject Code should be of length 6";
+										},
+										decoration: InputDecoration(
+											labelText: "Subject Code",
 											errorStyle: TextStyle(color: Colors.yellow),
 											border: OutlineInputBorder(
 												borderRadius: BorderRadius.circular(5.0))),
@@ -65,7 +82,7 @@ class _JoinClassState extends State<JoinClass> {
 										shape: RoundedRectangleBorder(
 											borderRadius: BorderRadius.circular(30.0),
 										),
-										elevation: 20.0,
+										elevation: 10.0,
 										onPressed: () {
 											if (_createForm.currentState.validate()) {
 												_createForm.currentState.save();
@@ -93,7 +110,7 @@ class _JoinClassState extends State<JoinClass> {
 		var snapshot = await Firestore.instance.collection('stud').document(_student.documentId).collection('subject').where('subjectId', isEqualTo: _code.substring(8)).where('teacherId', isEqualTo: _code.substring(0,8)).getDocuments();
 
 		if(snapshot.documents.length > 0) {
-			toast('Class already joined.');
+			toast('Bhadwa hai kya?');
 			setState(() {
 				_isLoading = false;
 			});

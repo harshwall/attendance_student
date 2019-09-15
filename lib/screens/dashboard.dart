@@ -9,6 +9,7 @@ import 'package:attendance_student/services/toast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class Dashboard extends StatefulWidget {
 
@@ -45,6 +46,8 @@ class DashboardState extends State<Dashboard> {
 	@override
 	Widget build(BuildContext context) {
 
+		var top = 0.0;
+
 		return Scaffold(
 			body: NestedScrollView(
 				headerSliverBuilder: (BuildContext context, bool innerBoxisScrolled) {
@@ -54,63 +57,77 @@ class DashboardState extends State<Dashboard> {
 							child: SliverSafeArea(
 								top: false,
 								sliver: SliverAppBar(
-									expandedHeight: 200.0,
+									backgroundColor: Colors.teal,
+									expandedHeight: 170.0,
 									floating: true,
 									pinned: true,
-									flexibleSpace: FlexibleSpaceBar(
-										centerTitle: true,
-										title: Text('Dashboard'),
-										background: Card(
-											child: Row(
-												mainAxisAlignment: MainAxisAlignment.spaceAround,
-												children: <Widget>[
-													Align(
-														alignment: Alignment.center,
-														child: CircleAvatar(
-															radius: 50.0,
-															backgroundColor: Colors.blueAccent,
-															child: ClipOval(
-																child: SizedBox(
-																	width: 100.0,
-																	height: 100.0,
-																	child: _url!=null?Image.network(_url):
-																	Image.network(
-																		"https://d2x5ku95bkycr3.cloudfront.net/App_Themes/Common/images/profile/0_200.png",
-																		fit: BoxFit.fill,
+									flexibleSpace: LayoutBuilder(
+										builder: (BuildContext context, BoxConstraints constraints) {
+											top = constraints.biggest.height;
+											return FlexibleSpaceBar(
+												centerTitle: true,
+												title: AnimatedOpacity(
+													duration: Duration(milliseconds: 300),
+													opacity: top < 90.0 ? 1.0: 0.0,
+													child: Text('Dashboard'),
+												),
+												background: Card(
+													color: Colors.teal,
+													child: Row(
+														mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+														children: <Widget>[
+															Align(
+																alignment: Alignment.center,
+																child: CircleAvatar(
+																	radius: 50.0,
+																	backgroundColor: Colors.blueAccent,
+																	child: ClipOval(
+																		child: SizedBox(
+																			width: 100.0,
+																			height: 100.0,
+																			child: _url!=null?Image.network(_url):
+																			Image.network(
+																				"https://d2x5ku95bkycr3.cloudfront.net/App_Themes/Common/images/profile/0_200.png",
+																				fit: BoxFit.fill,
+																			),
+																		),
 																	),
 																),
-															),
-														),
 
-													),
-													Column(
-														mainAxisAlignment: MainAxisAlignment.center,
-														children: <Widget>[
-															Container(
-																	child:Text(
+															),
+															Column(
+																mainAxisAlignment: MainAxisAlignment.center,
+																children: <Widget>[
+																	Container(
+																		child:Text(
 																			_student.name,
 																			textScaleFactor: 1.5,
-																		),
-																),
-															Container(
-																	child: Text(
-																			_student.regNo,
-																			textScaleFactor: 1.5,
-																		),
-																),
-															Container(
-																	child: Text(
-																			_student.classId,
-																			textScaleFactor: 1.5,
+																			style: TextStyle(color: Colors.white),
 																		),
 																	),
-														],
-													)
-												]
+																	Container(
+																		child: Text(
+																			_student.regNo,
+																			textScaleFactor: 1.5,
+																			style: TextStyle(color: Colors.white),
+																		),
+																	),
+																	Container(
+																		child: Text(
+																			_student.classId,
+																			textScaleFactor: 1.5,
+																			style: TextStyle(color: Colors.white),
+																		),
+																	),
+																],
+															)
+														]
 
-											),
-										)
-									),
+													),
+												)
+											);
+										},
+									)
 								),
 							),
 						)
@@ -138,12 +155,15 @@ class DashboardState extends State<Dashboard> {
 
 				},
 				tooltip: 'Join New Class',
-				backgroundColor: Colors.blueAccent,
+				backgroundColor: Colors.teal,
 			),
 
 			drawer: Drawer(
 				child: ListView(
 					children: <Widget>[
+						DrawerHeader(
+							child: Icon(Icons.account_circle),
+						),
 						ListTile(
 							title: Text('Profile'),
 							onTap: () {
@@ -197,6 +217,8 @@ class DashboardState extends State<Dashboard> {
 				Subject subject = Subject.fromMapObject(doc);
 				subject.documentId = doc.documentID;
 				subject.studentDocumentId = _student.documentId;
+
+				double percent = getPercent(subject);
 				return GestureDetector(
 					onTap: () {
 						Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -207,18 +229,13 @@ class DashboardState extends State<Dashboard> {
 					child: Card(
 						child: ListTile(
 							title: Text(subject.subjectId+'  '+subject.subjectName),
-							subtitle: Text(subject.teacherId),
-							trailing: Container(
-								width: 30.0,
-								child: Row(
-									children: <Widget>[
-										Text(subject.present),
-										Container(
-											width: 5.0,
-										),
-										Text(subject.absent)
-									],
-								),
+							subtitle: Text(predictFuture(subject)),
+							trailing: CircularPercentIndicator(
+								radius: 50.0,
+								lineWidth: 5.0,
+								percent: percent,
+								center: Text((percent*100).toInt().toString()+'%'),
+								progressColor: percent>=.75 ? Colors.green: Colors.red,
 							)
 						),
 					),
@@ -229,6 +246,11 @@ class DashboardState extends State<Dashboard> {
 		return listView;
   }
 
+  double getPercent(Subject subject) {
+		if(int.parse(subject.present)+int.parse(subject.absent) == 0)
+			return 0.0;
+		return int.parse(subject.present)/(int.parse(subject.present)+int.parse(subject.absent));
+  }
 
   void getURL() async{
 		String url;
@@ -240,5 +262,26 @@ class DashboardState extends State<Dashboard> {
 	    _url = url;
 	  });
 
+  }
+
+  String predictFuture(Subject subject) {
+		int p = int.parse(subject.present);
+		int a = int.parse(subject.absent);
+
+		if(p == 3*a)
+			return "You can't miss the next class.";
+		else if(p > 3*a) {
+			int temp = (p/3-a).toInt();
+			if(temp == 0)
+				return "You can't miss the next class.";
+			else if(temp == 1)
+				return 'You may leave next '+temp.toString()+' class';
+			else
+				return 'You may leave next '+temp.toString()+' classes';
+		}
+		else {
+			int temp = 3*a-p;
+				return 'Attend next '+temp.toString()+' classes to get back on track';
+		}
   }
 }

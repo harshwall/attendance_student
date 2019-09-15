@@ -80,7 +80,7 @@ class LoginState extends State<Login> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30.0),
                         ),
-                        elevation: 20.0,
+                        elevation: 10.0,
                         onPressed: () {
                           if (_loginForm.currentState.validate() && _isLoading==false) {
                             _loginForm.currentState.save();
