@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:attendance_student/classes/student.dart';
@@ -8,6 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FirestoreCRUD{
     //  This function looks for the document for login
@@ -32,6 +34,7 @@ class FirestoreCRUD{
           incoming.documentId = docs.documents[0].documentID;
           student = incoming;
           value=true;
+          storeData(student);
           Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => Dashboard(student)), (Route<dynamic> route) => false);
 
         }
@@ -83,6 +86,12 @@ class FirestoreCRUD{
       StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child(fileName);
       StorageUploadTask uploadTask = firebaseStorageRef.putFile(_image);
       StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
+    }
+
+    static void storeData(Student student) async {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('storedObject', json.encode(student.toMap()));
+      prefs.setString('storedId', student.documentId);
     }
 
 }

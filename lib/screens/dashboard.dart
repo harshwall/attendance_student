@@ -3,6 +3,7 @@ import 'package:attendance_student/classes/student.dart';
 import 'package:attendance_student/classes/subject.dart';
 import 'package:attendance_student/screens/history.dart';
 import 'package:attendance_student/screens/joinclass.dart';
+import 'package:attendance_student/screens/login.dart';
 import 'package:attendance_student/screens/profile.dart';
 import 'package:attendance_student/screens/qrshow.dart';
 import 'package:attendance_student/services/toast.dart';
@@ -10,6 +11,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Dashboard extends StatefulWidget {
 
@@ -185,7 +187,8 @@ class DashboardState extends State<Dashboard> {
 						ListTile(
 							title: Text('Sign Out'),
 							onTap: () {
-
+								clearSharedPrefs(_student);
+								Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => Login()), (Route<dynamic> route) => false);
 							},
 						)
 					],
@@ -283,5 +286,11 @@ class DashboardState extends State<Dashboard> {
 			int temp = 3*a-p;
 				return 'Attend next '+temp.toString()+' classes to get back on track';
 		}
+  }
+
+  void clearSharedPrefs(Student student) async {
+		final SharedPreferences prefs = await SharedPreferences.getInstance();
+		prefs.setString('storedObject', '');
+		prefs.setString('storedId', '');
   }
 }

@@ -13,6 +13,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:loading/indicator/ball_pulse_indicator.dart';
 import 'package:loading/loading.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:validators/validators.dart';
 
 class Profile extends StatefulWidget {
@@ -403,6 +404,7 @@ class _ProfileState extends State<Profile> {
 															FirestoreCRUD.profileUpdate(_student,_image ,true).then((bool b){
 																if(b==true){
 																	toast('Updated successfully');
+																	clearSharedPrefs(_student);
 																	Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => Login()), (Route<dynamic> route) => false);
 																}
 																else
@@ -477,6 +479,12 @@ class _ProfileState extends State<Profile> {
 			  _url = storedUrl;
 			});
 		});
+	}
+
+	void clearSharedPrefs(Student student) async {
+		final SharedPreferences prefs = await SharedPreferences.getInstance();
+		prefs.setString('storedObject', '');
+		prefs.setString('storedId', '');
 	}
 }
 
