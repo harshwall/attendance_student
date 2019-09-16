@@ -6,45 +6,42 @@ import 'package:flutter/material.dart';
 class History extends StatefulWidget {
 
 	Subject _subject;
-
 	History(this._subject);
 
 	@override
-  _HistoryState createState() => _HistoryState(_subject);
+	_HistoryState createState() => _HistoryState(_subject);
 }
 
 class _HistoryState extends State<History> {
 
 	Subject _subject;
-
 	_HistoryState(this._subject);
 
 	@override
-  Widget build(BuildContext context) {
-    return Scaffold(
-		appBar: AppBar(
-			title: Text('History'),
-		),
-		body: getHistory(),
-	);
-  }
+	Widget build(BuildContext context) {
+		return Scaffold(
+			appBar: AppBar(
+				title: Text('History'),
+			),
+			body: getHistory(),
+		);
+	}
 
 
-  //It returns the stream builder of that particular subject after running firebase queries.
-  Widget getHistory() {
-  	return StreamBuilder<QuerySnapshot> (
-		stream: Firestore.instance.collection('stud').document(_subject.studentDocumentId).collection('subject').document(_subject.documentId).collection('attendance').orderBy("date", descending: true).snapshots(),
-		builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-			if(!snapshot.hasData)
-				return Text('Loading');
-			return getHistoryList(snapshot);
-		},
-	);
-  }
+	//It returns the stream builder of that particular subject after running firebase queries.
+	Widget getHistory() {
+		return StreamBuilder<QuerySnapshot> (
+			stream: Firestore.instance.collection('stud').document(_subject.studentDocumentId).collection('subject').document(_subject.documentId).collection('attendance').orderBy("date", descending: true).snapshots(),
+			builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+				if(!snapshot.hasData)
+					return Text('Loading');
+				return getHistoryList(snapshot);
+			},
+		);
+	}
 
-  //returns the attendance as a list view
-  getHistoryList(AsyncSnapshot<QuerySnapshot> snapshot) {
-
+	//returns the attendance as a list view
+	getHistoryList(AsyncSnapshot<QuerySnapshot> snapshot) {
 		var listView = ListView.builder(itemBuilder: (context, index) {
 			if(index<snapshot.data.documents.length) {
 				var doc = snapshot.data.documents[index];
@@ -80,5 +77,5 @@ class _HistoryState extends State<History> {
 			}
 		});
 		return listView;
-  }
+	}
 }

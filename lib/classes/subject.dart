@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 //Class to uniquely create a subject in firestore
 
 class Subject {

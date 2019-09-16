@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-
 //Simple method to toast
-void toast (String s){
+void toast(String s){
   Fluttertoast.showToast(
       msg: s,
       toastLength: Toast.LENGTH_SHORT,

@@ -1,7 +1,6 @@
 import 'package:attendance_student/classes/student.dart';
 import 'package:attendance_student/services/toast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_firestore/cloud_firestore.dart' as prefix0;
 import 'package:flutter/material.dart';
 import 'package:loading/indicator/ball_pulse_indicator.dart';
 import 'package:loading/loading.dart';
@@ -9,8 +8,6 @@ import 'package:loading/loading.dart';
 class JoinClass extends StatefulWidget {
 
 	Student _student;
-
-
 	JoinClass(this._student);
 
 	@override
@@ -20,9 +17,7 @@ class JoinClass extends StatefulWidget {
 class _JoinClassState extends State<JoinClass> {
 
 	Student _student;
-
 	_JoinClassState(this._student);
-
 	var _createForm = GlobalKey<FormState>();
 
 	String _code="";
@@ -50,12 +45,16 @@ class _JoinClassState extends State<JoinClass> {
 										validator: (String value) {
 											if (value.length != 8)
 												return "Teacher's ID should be of length 8";
+											else
+												return null;
 										},
 										decoration: InputDecoration(
 											labelText: "Teacher's ID",
 											errorStyle: TextStyle(color: Colors.red),
 											border: OutlineInputBorder(
-												borderRadius: BorderRadius.circular(5.0))),
+												borderRadius: BorderRadius.circular(5.0)
+											)
+										),
 									),
 								),
 								Padding(
@@ -67,12 +66,16 @@ class _JoinClassState extends State<JoinClass> {
 										validator: (String value) {
 											if (value.length != 6)
 												return "Subject Code should be of length 6";
+											else
+												return null;
 										},
 										decoration: InputDecoration(
 											labelText: "Subject Code",
 											errorStyle: TextStyle(color: Colors.red),
 											border: OutlineInputBorder(
-												borderRadius: BorderRadius.circular(5.0))),
+												borderRadius: BorderRadius.circular(5.0)
+											)
+										),
 									),
 								),
 								Padding(
@@ -90,7 +93,6 @@ class _JoinClassState extends State<JoinClass> {
 													_isLoading=true;
 												});
 												sendCode();
-
 											}
 										}),
 								),
@@ -103,12 +105,9 @@ class _JoinClassState extends State<JoinClass> {
 	}
 
 	void sendCode() async {
-
 		Map<String, String> map = Map<String,String>();
 		map['docId'] = _student.documentId;
-
 		var snapshot = await Firestore.instance.collection('stud').document(_student.documentId).collection('subject').where('subjectId', isEqualTo: _code.substring(8)).where('teacherId', isEqualTo: _code.substring(0,8)).getDocuments();
-
 		if(snapshot.documents.length > 0) {
 			toast('Bhadwa hai kya?');
 			setState(() {
@@ -148,6 +147,5 @@ class _JoinClassState extends State<JoinClass> {
 			});
 		}
 	}
-
 }
 

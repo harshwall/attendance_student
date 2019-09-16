@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:attendance_student/classes/student.dart';
-import 'package:attendance_student/services/password.dart';
 import 'package:attendance_student/services/toast.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:intl/intl.dart';
@@ -21,11 +19,9 @@ class SignUp extends StatefulWidget {
 }
 
 class SignUpState extends State<SignUp> {
+
   var _signUpForm = GlobalKey<FormState>();
   var _passKey = GlobalKey<FormFieldState>();
-
-
-
   Student student = Student.blank();
   File _image;
 
@@ -43,7 +39,6 @@ class SignUpState extends State<SignUp> {
     super.initState();
     _currentCategorySelected = categoryList[0];
   }
-
 
   //UI part of sign up
   @override
@@ -81,7 +76,6 @@ class SignUpState extends State<SignUp> {
                           ),
                         ),
                       ),
-
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 60.0),
@@ -104,16 +98,20 @@ class SignUpState extends State<SignUp> {
                       student.name = value;
                     },
                     validator: (String value) {
-                      if (value.isEmpty) return 'Enter Name';
+                      if (value.isEmpty)
+                        return 'Enter Name';
+                      else
+                        return null;
                     },
                     decoration: InputDecoration(
                         labelText: 'Name',
                         errorStyle: TextStyle(color: Colors.red),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5.0))),
+                            borderRadius: BorderRadius.circular(5.0)
+                        )
+                    ),
                   ),
                 ),
-
                 Padding(
                   padding: EdgeInsets.all(5.0),
                   child: TextFormField(
@@ -122,16 +120,20 @@ class SignUpState extends State<SignUp> {
                     onSaved: (value) {
                     },
                     validator: (String value) {
-                      if (value.length<6) return 'Password too short';
+                      if (value.length<6)
+                        return 'Password too short';
+                      else
+                        return null;
                     },
                     decoration: InputDecoration(
                         labelText: 'Password',
                         errorStyle: TextStyle(color: Colors.red),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5.0))),
+                            borderRadius: BorderRadius.circular(5.0)
+                        )
+                    ),
                   ),
                 ),
-
                 Padding(
                   padding: EdgeInsets.all(5.0),
                   child: TextFormField(
@@ -142,12 +144,16 @@ class SignUpState extends State<SignUp> {
                     validator: (String value) {
                       if (value.length<6 || _passKey.currentState.value != value )
                         return "Passwords don't match";
+                      else
+                        return null;
                     },
                     decoration: InputDecoration(
                         labelText: 'Confirm Password',
                         errorStyle: TextStyle(color: Colors.red),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5.0))),
+                            borderRadius: BorderRadius.circular(5.0)
+                        )
+                    ),
                   ),
                 ),
 
@@ -158,13 +164,18 @@ class SignUpState extends State<SignUp> {
                       student.regNo = value;
                     },
                     validator: (String value) {
-                      if (value.length!=8) return 'Enter Registration Number';
+                      if (value.length!=8)
+                        return 'Enter Registration Number';
+                      else
+                        return null;
                     },
                     decoration: InputDecoration(
                         labelText: 'Registration Number',
                         errorStyle: TextStyle(color: Colors.red),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5.0))),
+                            borderRadius: BorderRadius.circular(5.0)
+                        )
+                    ),
                   ),
                 ),
 
@@ -175,13 +186,18 @@ class SignUpState extends State<SignUp> {
                       student.classId = value;
                     },
                     validator: (String value) {
-                      if (value.length != 5) return "Enter valid Class ID";
+                      if (value.length != 5)
+                        return "Enter valid Class ID";
+                      else
+                        return null;
                     },
                     decoration: InputDecoration(
                         labelText: "Class Id",
                         errorStyle: TextStyle(color: Colors.red),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5.0))),
+                            borderRadius: BorderRadius.circular(5.0)
+                        )
+                    ),
                   ),
                 ),
 
@@ -194,12 +210,16 @@ class SignUpState extends State<SignUp> {
                     validator: (String value) {
                       if (!RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value))
                         return 'Enter Correct Email';
+                      else
+                        return null;
                     },
                     decoration: InputDecoration(
                         labelText: 'Email',
                         errorStyle: TextStyle(color: Colors.red),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5.0))),
+                            borderRadius: BorderRadius.circular(5.0)
+                        )
+                    ),
                   ),
                 ),
 
@@ -213,40 +233,47 @@ class SignUpState extends State<SignUp> {
                     validator: (String value) {
                       if (!RegExp("[0-9]").hasMatch(value) || value.length!=10)
                         return 'Enter Mobile Number';
+                      else
+                        return null;
                     },
                     decoration: InputDecoration(
                         labelText: 'Mobile Number',
                         errorStyle: TextStyle(color: Colors.red),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5.0))),
+                            borderRadius: BorderRadius.circular(5.0)
+                        )
+                    ),
                   ),
                 ),
 
                 Padding(
-                  padding: EdgeInsets.all(5.0),
-                  child: DateTimeField(
-                    format: dateFormat,
-                    onShowPicker: (context, currentValue) {
-                      return showDatePicker(
-                          context: context,
-                          initialDate: dateTime,
-                          firstDate: DateTime(1970),
-                          lastDate: DateTime(2050));
-                    },
-                    onSaved: (value) {
-                      student.dob = value.toString();
-                    },
-                    validator: (DateTime value) {
-                      if(!isDate(value.toString()) || value == null || value.compareTo(DateTime.now().subtract(Duration(days: 1))) >= 0)
-                        return 'Enter correct DOB';
-                    },
-                    decoration: InputDecoration(
-                      labelText: 'Date of Birth',
-                      errorStyle: TextStyle(color: Colors.red),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5.0))
-                    ),
-                  )
+                    padding: EdgeInsets.all(5.0),
+                    child: DateTimeField(
+                      format: dateFormat,
+                      onShowPicker: (context, currentValue) {
+                        return showDatePicker(
+                            context: context,
+                            initialDate: dateTime,
+                            firstDate: DateTime(1970),
+                            lastDate: DateTime(2050));
+                      },
+                      onSaved: (value) {
+                        student.dob = value.toString();
+                      },
+                      validator: (DateTime value) {
+                        if(!isDate(value.toString()) || value == null || value.compareTo(DateTime.now().subtract(Duration(days: 1))) >= 0)
+                          return 'Enter correct DOB';
+                        else
+                          return null;
+                      },
+                      decoration: InputDecoration(
+                          labelText: 'Date of Birth',
+                          errorStyle: TextStyle(color: Colors.red),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5.0)
+                          )
+                      ),
+                    )
                 ),
 
                 Padding(
@@ -254,7 +281,7 @@ class SignUpState extends State<SignUp> {
                   child: Row(
                     children: <Widget>[
                       Text(
-                          'Gender',
+                        'Gender',
                         textScaleFactor: 1.5,
                       ),
                       Container(
@@ -316,8 +343,8 @@ class SignUpState extends State<SignUp> {
                       DropdownButton<String> (
                         items: categoryList.map((String value) {
                           return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value)
+                              value: value,
+                              child: Text(value)
                           );
                         }).toList(),
                         value: _currentCategorySelected,
@@ -344,39 +371,36 @@ class SignUpState extends State<SignUp> {
                           borderRadius: BorderRadius.circular(30.0)
                       ),
                       onPressed: () {
-
-
                         //The Sign Up button checks for below parameters
+                        if(_image!=null  && _signUpForm.currentState.validate() && _isLoading==false) {
+                          setState(() {
+                            _isLoading = true;
+                          });
 
-                          if(_image!=null  && _signUpForm.currentState.validate() && _isLoading==false) {
-                            setState(() {
-                              _isLoading = true;
-                            });
+                          //forms state is saved
+                          _signUpForm.currentState.save();
+                          student.verify = 0;
+                          student.gender = genderToString(_genderValue);
+                          student.category = _currentCategorySelected;
 
-                            //forms state is saved
-                            _signUpForm.currentState.save();
-                            student.verify = 0;
-                            student.gender = genderToString(_genderValue);
-                            student.category = _currentCategorySelected;
-
-                            //Method made signUp if new user
-                            FirestoreCRUD.signUp(student,_image).then((bool b){
-                              if(b==true){
-                                toast('Registered successfully');
-                                Navigator.of(context).pop();
-                              }
-                              else
+                          //Method made signUp if new user
+                          FirestoreCRUD.signUp(student,_image).then((bool b){
+                            if(b==true){
+                              toast('Registered successfully');
+                              Navigator.of(context).pop();
+                            }
+                            else
                               setState(() {
                                 _isLoading = false;
                               });
-                            });
-                          }
-                          else if(_image==null){
-                            toast('Select an image');
-                          }
-                          else if(_isLoading){
-                            toast("Please wait");
-                          }
+                          });
+                        }
+                        else if(_image==null){
+                          toast('Select an image');
+                        }
+                        else if(_isLoading){
+                          toast("Please wait");
+                        }
 
                       },
                     ),
@@ -395,7 +419,6 @@ class SignUpState extends State<SignUp> {
     );
   }
 
-
   String genderToString(int no) {
     switch(no) {
       case 0:
@@ -407,22 +430,14 @@ class SignUpState extends State<SignUp> {
     }
   }
 
-
   //fetches image from gallery
   Future getImage() async {
     var image = await ImagePicker.pickImage(
-      source: ImageSource.gallery
+        source: ImageSource.gallery
     );
 
     setState(() {
       _image = image;
     });
   }
-
-
-
-
-
-
-
 }

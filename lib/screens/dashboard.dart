@@ -1,4 +1,3 @@
-import 'package:attendance_student/classes/attendance.dart';
 import 'package:attendance_student/classes/student.dart';
 import 'package:attendance_student/classes/subject.dart';
 import 'package:attendance_student/screens/history.dart';
@@ -16,12 +15,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Dashboard extends StatefulWidget {
 
 	Student _student;
-
 	Dashboard(this._student);
 
 	@override
 	State<StatefulWidget> createState() {
-
 		return DashboardState(_student);
 	}
 
@@ -30,13 +27,8 @@ class Dashboard extends StatefulWidget {
 class DashboardState extends State<Dashboard> {
 
 	Student _student;
-
-
-
 	DashboardState(this._student);
 	String _url;
-
-
 
 	void initState() {
 		super.initState();
@@ -44,7 +36,6 @@ class DashboardState extends State<Dashboard> {
 	}
 
 	//UI part of the dashboard starts
-
 	@override
 	Widget build(BuildContext context) {
 
@@ -96,7 +87,6 @@ class DashboardState extends State<Dashboard> {
 																		),
 																	),
 																),
-
 															),
 															Column(
 																mainAxisAlignment: MainAxisAlignment.center,
@@ -125,7 +115,6 @@ class DashboardState extends State<Dashboard> {
 																],
 															)
 														]
-
 													),
 												)
 											);
@@ -134,17 +123,12 @@ class DashboardState extends State<Dashboard> {
 								),
 							),
 						)
-
 					];
 				},
-					//The dynnamic card view appBar ends here
-
-
-					//Body shows the list of subjects student has
+				//The dynnamic card view appBar ends here
+				//Body shows the list of subjects student has
 				body: getSubjects()
 			),
-
-
 			//Floating action button to join new class
 			floatingActionButton: FloatingActionButton(
 				child: Icon(Icons.add),
@@ -155,12 +139,10 @@ class DashboardState extends State<Dashboard> {
 						}));
 					else
 						toast('Your profile is not verified');
-
 				},
 				tooltip: 'Join New Class',
 				backgroundColor: Colors.teal,
 			),
-
 			drawer: Drawer(
 				child: ListView(
 					children: <Widget>[
@@ -182,7 +164,6 @@ class DashboardState extends State<Dashboard> {
 								Navigator.push(context, MaterialPageRoute(builder: (context) {
 									return QrShow(_student);
 								}));
-
 							},
 						),
 						ListTile(
@@ -198,7 +179,6 @@ class DashboardState extends State<Dashboard> {
 		);
 	}
 
-
 	//Fetches subjects of the student fom the database
 	Widget getSubjects() {
 		return StreamBuilder<QuerySnapshot> (
@@ -211,9 +191,8 @@ class DashboardState extends State<Dashboard> {
 		);
 	}
 
-
 	//This method returns a list view of subjects
-  getSubjectList(AsyncSnapshot<QuerySnapshot> snapshot) {
+	getSubjectList(AsyncSnapshot<QuerySnapshot> snapshot) {
 
 		var listView = ListView.builder(itemBuilder: (context, index) {
 			if(index<snapshot.data.documents.length) {
@@ -246,32 +225,29 @@ class DashboardState extends State<Dashboard> {
 				);
 			}
 		});
-
 		return listView;
-  }
+	}
 
-  double getPercent(Subject subject) {
+	double getPercent(Subject subject) {
 		if(int.parse(subject.present)+int.parse(subject.absent) == 0)
 			return 0.0;
 		return int.parse(subject.present)/(int.parse(subject.present)+int.parse(subject.absent));
-  }
+	}
 
-  void getURL() async{
+	void getURL() async{
 		String url;
-	  StorageReference ref = FirebaseStorage.instance.ref().child(_student.regNo);
-	  url = (await ref.getDownloadURL()).toString();
-	  print(url);
+		StorageReference ref = FirebaseStorage.instance.ref().child(_student.regNo);
+		url = (await ref.getDownloadURL()).toString();
+		print(url);
 
-	  setState(() {
-	    _url = url;
-	  });
+		setState(() {
+			_url = url;
+		});
+	}
 
-  }
-
-  String predictFuture(Subject subject) {
+	String predictFuture(Subject subject) {
 		int p = int.parse(subject.present);
 		int a = int.parse(subject.absent);
-
 		if(p == 3*a)
 			return "You can't miss the next class.";
 		else if(p > 3*a) {
@@ -285,13 +261,13 @@ class DashboardState extends State<Dashboard> {
 		}
 		else {
 			int temp = 3*a-p;
-				return 'Attend next '+temp.toString()+' classes to get back on track';
+			return 'Attend next '+temp.toString()+' classes to get back on track';
 		}
-  }
+	}
 
-  void clearSharedPrefs(Student student) async {
+	void clearSharedPrefs(Student student) async {
 		final SharedPreferences prefs = await SharedPreferences.getInstance();
 		prefs.setString('storedObject', '');
 		prefs.setString('storedId', '');
-  }
+	}
 }

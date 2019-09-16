@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:attendance_student/classes/student.dart';
 import 'package:attendance_student/screens/login.dart';
 import 'package:attendance_student/services/firestorecrud.dart';
@@ -32,9 +31,7 @@ class _ProfileState extends State<Profile> {
 
 	Student _student;
 	_ProfileState(this._student);
-
 	File _image;
-
 	String _url = "https://d2x5ku95bkycr3.cloudfront.net/App_Themes/Common/images/profile/0_200.png";
 
 	int _genderValue;
@@ -49,13 +46,13 @@ class _ProfileState extends State<Profile> {
 	var _currentCategorySelected;
 
 	@override
-  void initState() {
-    super.initState();
-	dateTime = DateTime.parse(_student.dob);
-	_currentCategorySelected = _student.category;
-	_genderValue = stringToGender(_student.gender);
-	getImageNetwork();
-  }
+	void initState() {
+		super.initState();
+		dateTime = DateTime.parse(_student.dob);
+		_currentCategorySelected = _student.category;
+		_genderValue = stringToGender(_student.gender);
+		getImageNetwork();
+	}
 
 	@override
 	Widget build(BuildContext context) {
@@ -117,16 +114,20 @@ class _ProfileState extends State<Profile> {
 											_student.name = value;
 										},
 										validator: (String value) {
-											if (value.isEmpty) return 'Enter Name';
+											if (value.isEmpty)
+												return 'Enter Name';
+											else
+												return null;
 										},
 										decoration: InputDecoration(
 											labelText: 'Name',
 											errorStyle: TextStyle(color: Colors.red),
 											border: OutlineInputBorder(
-												borderRadius: BorderRadius.circular(5.0))),
+												borderRadius: BorderRadius.circular(5.0)
+											)
+										),
 									),
 								),
-
 								Padding(
 									padding: EdgeInsets.all(5.0),
 									child: TextFormField(
@@ -136,16 +137,20 @@ class _ProfileState extends State<Profile> {
 										onSaved: (value) {
 										},
 										validator: (String value) {
-											if (value.length<6 && value.length>0) return 'Password too short';
+											if (value.length<6 && value.length>0)
+												return 'Password too short';
+											else
+												return null;
 										},
 										decoration: InputDecoration(
 											labelText: 'Password (Leave blank if not Using)',
 											errorStyle: TextStyle(color: Colors.red),
 											border: OutlineInputBorder(
-												borderRadius: BorderRadius.circular(5.0))),
+												borderRadius: BorderRadius.circular(5.0)
+											)
+										),
 									),
 								),
-
 								Padding(
 									padding: EdgeInsets.all(5.0),
 									child: TextFormField(
@@ -157,15 +162,18 @@ class _ProfileState extends State<Profile> {
 										validator: (String value) {
 											if ((value.length<6 && value.length>0) || _passKey.currentState.value != value )
 												return "Passwords don't match";
+											else
+												return null;
 										},
 										decoration: InputDecoration(
 											labelText: 'Confirm Password',
 											errorStyle: TextStyle(color: Colors.red),
 											border: OutlineInputBorder(
-												borderRadius: BorderRadius.circular(5.0))),
+												borderRadius: BorderRadius.circular(5.0)
+											)
+										),
 									),
 								),
-
 								Padding(
 									padding: EdgeInsets.all(5.0),
 									child: TextFormField(
@@ -175,16 +183,20 @@ class _ProfileState extends State<Profile> {
 											_student.regNo = value;
 										},
 										validator: (String value) {
-											if (value.length!=8) return 'Enter Registration Number';
+											if (value.length!=8)
+												return 'Enter Registration Number';
+											else
+												return null;
 										},
 										decoration: InputDecoration(
 											labelText: 'Registration Number',
 											errorStyle: TextStyle(color: Colors.red),
 											border: OutlineInputBorder(
-												borderRadius: BorderRadius.circular(5.0))),
+												borderRadius: BorderRadius.circular(5.0)
+											)
+										),
 									),
 								),
-
 								Padding(
 									padding: EdgeInsets.all(5.0),
 									child: TextFormField(
@@ -194,16 +206,20 @@ class _ProfileState extends State<Profile> {
 											_student.classId = value;
 										},
 										validator: (String value) {
-											if (value.length != 5) return "Enter valid Class ID";
+											if (value.length != 5)
+												return "Enter valid Class ID";
+											else
+												return null;
 										},
 										decoration: InputDecoration(
 											labelText: "Class Id",
 											errorStyle: TextStyle(color: Colors.red),
 											border: OutlineInputBorder(
-												borderRadius: BorderRadius.circular(5.0))),
+												borderRadius: BorderRadius.circular(5.0)
+											)
+										),
 									),
 								),
-
 								Padding(
 									padding: EdgeInsets.all(5.0),
 									child: TextFormField(
@@ -215,15 +231,18 @@ class _ProfileState extends State<Profile> {
 										validator: (String value) {
 											if (!RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value))
 												return 'Enter Correct Email';
+											else
+												return null;
 										},
 										decoration: InputDecoration(
 											labelText: 'Email',
 											errorStyle: TextStyle(color: Colors.red),
 											border: OutlineInputBorder(
-												borderRadius: BorderRadius.circular(5.0))),
+												borderRadius: BorderRadius.circular(5.0)
+											)
+										),
 									),
 								),
-
 								Padding(
 									padding: EdgeInsets.all(5.0),
 									child: TextFormField(
@@ -236,15 +255,18 @@ class _ProfileState extends State<Profile> {
 										validator: (String value) {
 											if (!RegExp("[0-9]").hasMatch(value) || value.length!=10)
 												return 'Enter Mobile Number';
+											else
+												return null;
 										},
 										decoration: InputDecoration(
 											labelText: 'Mobile Number',
 											errorStyle: TextStyle(color: Colors.red),
 											border: OutlineInputBorder(
-												borderRadius: BorderRadius.circular(5.0))),
+												borderRadius: BorderRadius.circular(5.0)
+											)
+										),
 									),
 								),
-
 								Padding(
 									padding: EdgeInsets.all(5.0),
 									child: DateTimeField(
@@ -264,16 +286,18 @@ class _ProfileState extends State<Profile> {
 										validator: (DateTime value) {
 											if(!isDate(value.toString()) || value == null || value.compareTo(DateTime.now().subtract(Duration(days: 1))) >= 0)
 												return 'Enter correct DOB';
+											else
+												return null;
 										},
 										decoration: InputDecoration(
 											labelText: 'Date of Birth',
 											errorStyle: TextStyle(color: Colors.red),
 											border: OutlineInputBorder(
-												borderRadius: BorderRadius.circular(5.0))
+												borderRadius: BorderRadius.circular(5.0)
+											)
 										),
 									)
 								),
-
 								Padding(
 									padding: EdgeInsets.all(5.0),
 									child: Row(
@@ -356,7 +380,6 @@ class _ProfileState extends State<Profile> {
 										],
 									),
 								),
-
 								Row(
 									children: <Widget>[
 										Expanded(
@@ -370,8 +393,6 @@ class _ProfileState extends State<Profile> {
 												borderRadius: BorderRadius.circular(30.0)
 											),
 											onPressed: () {
-
-
 												//The Sign Up button checks for below parameters
 												if(_profileForm.currentState.validate() && _isLoading==false) {
 													setState(() {
@@ -415,14 +436,10 @@ class _ProfileState extends State<Profile> {
 														});
 
 													}
-
-
-
 												}
 												else if(_isLoading){
 													toast("Please wait");
 												}
-
 											},
 										),
 										Expanded(
@@ -476,7 +493,7 @@ class _ProfileState extends State<Profile> {
 	void getImageNetwork() async {
 		FirebaseStorage.instance.ref().child(_student.regNo).getDownloadURL().then((storedUrl) {
 			setState(() {
-			  _url = storedUrl;
+				_url = storedUrl;
 			});
 		});
 	}
