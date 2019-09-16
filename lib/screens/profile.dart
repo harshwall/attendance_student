@@ -121,7 +121,7 @@ class _ProfileState extends State<Profile> {
 										},
 										decoration: InputDecoration(
 											labelText: 'Name',
-											errorStyle: TextStyle(color: Colors.yellow),
+											errorStyle: TextStyle(color: Colors.red),
 											border: OutlineInputBorder(
 												borderRadius: BorderRadius.circular(5.0))),
 									),
@@ -140,7 +140,7 @@ class _ProfileState extends State<Profile> {
 										},
 										decoration: InputDecoration(
 											labelText: 'Password (Leave blank if not Using)',
-											errorStyle: TextStyle(color: Colors.yellow),
+											errorStyle: TextStyle(color: Colors.red),
 											border: OutlineInputBorder(
 												borderRadius: BorderRadius.circular(5.0))),
 									),
@@ -160,7 +160,7 @@ class _ProfileState extends State<Profile> {
 										},
 										decoration: InputDecoration(
 											labelText: 'Confirm Password',
-											errorStyle: TextStyle(color: Colors.yellow),
+											errorStyle: TextStyle(color: Colors.red),
 											border: OutlineInputBorder(
 												borderRadius: BorderRadius.circular(5.0))),
 									),
@@ -179,7 +179,7 @@ class _ProfileState extends State<Profile> {
 										},
 										decoration: InputDecoration(
 											labelText: 'Registration Number',
-											errorStyle: TextStyle(color: Colors.yellow),
+											errorStyle: TextStyle(color: Colors.red),
 											border: OutlineInputBorder(
 												borderRadius: BorderRadius.circular(5.0))),
 									),
@@ -198,7 +198,7 @@ class _ProfileState extends State<Profile> {
 										},
 										decoration: InputDecoration(
 											labelText: "Class Id",
-											errorStyle: TextStyle(color: Colors.yellow),
+											errorStyle: TextStyle(color: Colors.red),
 											border: OutlineInputBorder(
 												borderRadius: BorderRadius.circular(5.0))),
 									),
@@ -218,7 +218,7 @@ class _ProfileState extends State<Profile> {
 										},
 										decoration: InputDecoration(
 											labelText: 'Email',
-											errorStyle: TextStyle(color: Colors.yellow),
+											errorStyle: TextStyle(color: Colors.red),
 											border: OutlineInputBorder(
 												borderRadius: BorderRadius.circular(5.0))),
 									),
@@ -239,7 +239,7 @@ class _ProfileState extends State<Profile> {
 										},
 										decoration: InputDecoration(
 											labelText: 'Mobile Number',
-											errorStyle: TextStyle(color: Colors.yellow),
+											errorStyle: TextStyle(color: Colors.red),
 											border: OutlineInputBorder(
 												borderRadius: BorderRadius.circular(5.0))),
 									),
@@ -267,7 +267,7 @@ class _ProfileState extends State<Profile> {
 										},
 										decoration: InputDecoration(
 											labelText: 'Date of Birth',
-											errorStyle: TextStyle(color: Colors.yellow),
+											errorStyle: TextStyle(color: Colors.red),
 											border: OutlineInputBorder(
 												borderRadius: BorderRadius.circular(5.0))
 										),

@@ -49,16 +49,16 @@ class MyApp extends StatelessWidget {
     );
   }
 
-  checkPreferences() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String jsonObject = prefs.getString('storedObject');
-    final String jsonId = prefs.getString('storedId');
-    if(jsonObject != null && jsonObject.isNotEmpty) {
-      Student student = Student.fromMapObject(json.decode(jsonObject));
-      student.documentId = jsonId;
-      return Dashboard(student);
-    }
-    else
-      return Login();
-  }
+//  checkPreferences() async {
+//    final SharedPreferences prefs = await SharedPreferences.getInstance();
+//    final String jsonObject = prefs.getString('storedObject');
+//    final String jsonId = prefs.getString('storedId');
+//    if(jsonObject != null && jsonObject.isNotEmpty) {
+//      Student student = Student.fromMapObject(json.decode(jsonObject));
+//      student.documentId = jsonId;
+//      return Dashboard(student);
+//    }
+//    else
+//      return Login();
+//  }
 }

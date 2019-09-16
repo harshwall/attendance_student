@@ -74,6 +74,7 @@ class DashboardState extends State<Dashboard> {
 													child: Text('Dashboard'),
 												),
 												background: Card(
+													elevation: 20.0,
 													color: Colors.teal,
 													child: Row(
 														mainAxisAlignment: MainAxisAlignment.spaceEvenly,

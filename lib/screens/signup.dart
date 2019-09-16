@@ -108,7 +108,7 @@ class SignUpState extends State<SignUp> {
                     },
                     decoration: InputDecoration(
                         labelText: 'Name',
-                        errorStyle: TextStyle(color: Colors.yellow),
+                        errorStyle: TextStyle(color: Colors.red),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5.0))),
                   ),
@@ -126,7 +126,7 @@ class SignUpState extends State<SignUp> {
                     },
                     decoration: InputDecoration(
                         labelText: 'Password',
-                        errorStyle: TextStyle(color: Colors.yellow),
+                        errorStyle: TextStyle(color: Colors.red),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5.0))),
                   ),
@@ -145,7 +145,7 @@ class SignUpState extends State<SignUp> {
                     },
                     decoration: InputDecoration(
                         labelText: 'Confirm Password',
-                        errorStyle: TextStyle(color: Colors.yellow),
+                        errorStyle: TextStyle(color: Colors.red),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5.0))),
                   ),
@@ -162,7 +162,7 @@ class SignUpState extends State<SignUp> {
                     },
                     decoration: InputDecoration(
                         labelText: 'Registration Number',
-                        errorStyle: TextStyle(color: Colors.yellow),
+                        errorStyle: TextStyle(color: Colors.red),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5.0))),
                   ),
@@ -179,7 +179,7 @@ class SignUpState extends State<SignUp> {
                     },
                     decoration: InputDecoration(
                         labelText: "Class Id",
-                        errorStyle: TextStyle(color: Colors.yellow),
+                        errorStyle: TextStyle(color: Colors.red),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5.0))),
                   ),
@@ -197,7 +197,7 @@ class SignUpState extends State<SignUp> {
                     },
                     decoration: InputDecoration(
                         labelText: 'Email',
-                        errorStyle: TextStyle(color: Colors.yellow),
+                        errorStyle: TextStyle(color: Colors.red),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5.0))),
                   ),
@@ -216,7 +216,7 @@ class SignUpState extends State<SignUp> {
                     },
                     decoration: InputDecoration(
                         labelText: 'Mobile Number',
-                        errorStyle: TextStyle(color: Colors.yellow),
+                        errorStyle: TextStyle(color: Colors.red),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5.0))),
                   ),
@@ -242,7 +242,7 @@ class SignUpState extends State<SignUp> {
                     },
                     decoration: InputDecoration(
                       labelText: 'Date of Birth',
-                      errorStyle: TextStyle(color: Colors.yellow),
+                      errorStyle: TextStyle(color: Colors.red),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.0))
                     ),

@@ -50,7 +50,7 @@ class LoginState extends State<Login> {
                       },
                       decoration: InputDecoration(
                           labelText: 'Registration Number',
-                          errorStyle: TextStyle(color: Colors.yellow),
+                          errorStyle: TextStyle(color: Colors.red),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(5.0))),
                     ),
@@ -68,7 +68,7 @@ class LoginState extends State<Login> {
                       },
                       decoration: InputDecoration(
                           labelText: 'Password',
-                          errorStyle: TextStyle(color: Colors.yellow),
+                          errorStyle: TextStyle(color: Colors.red),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(5.0))),
                     ),
