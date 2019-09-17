@@ -6,13 +6,20 @@ import 'package:loading/indicator/ball_pulse_indicator.dart';
 import 'package:loading/loading.dart';
 
 class Login extends StatefulWidget {
+
+	bool getHelp;
+	Login(this.getHelp);
+
 	@override
 	State<StatefulWidget> createState() {
-		return LoginState();
+		return LoginState(getHelp);
 	}
 }
 
 class LoginState extends State<Login> {
+
+	bool getHelp;
+	LoginState(this.getHelp);
 
 	var _loginForm = GlobalKey<FormState>();
 	Student student = Student.blank();
@@ -88,7 +95,7 @@ class LoginState extends State<Login> {
 													_isLoading=true;
 												});
 												//An async is called to verify login
-												FirestoreCRUD.login(context,student, inputPass).then((bool value){
+												FirestoreCRUD.login(context,student, inputPass, getHelp).then((bool value){
 													setState(() {
 														_isLoading=value;
 													});

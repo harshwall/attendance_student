@@ -428,7 +428,7 @@ class _ProfileState extends State<Profile> {
 																if(b==true){
 																	toast('Updated successfully');
 																	clearSharedPrefs(_student);
-																	Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => Login()), (Route<dynamic> route) => false);
+																	Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => Login(false)), (Route<dynamic> route) => false);
 																}
 																else
 																	setState(() {

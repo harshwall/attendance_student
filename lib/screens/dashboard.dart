@@ -11,15 +11,17 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 class Dashboard extends StatefulWidget {
 
 	Student _student;
-	Dashboard(this._student);
+	bool getHelp;
+	Dashboard(this._student, this.getHelp);
 
 	@override
 	State<StatefulWidget> createState() {
-		return DashboardState(_student);
+		return DashboardState(_student, getHelp);
 	}
 
 }
@@ -27,7 +29,8 @@ class Dashboard extends StatefulWidget {
 class DashboardState extends State<Dashboard> {
 
 	Student _student;
-	DashboardState(this._student);
+	bool getHelp;
+	DashboardState(this._student, this.getHelp);
 	String _url;
 
 	void initState() {
@@ -35,13 +38,26 @@ class DashboardState extends State<Dashboard> {
 		getURL();
 	}
 
+	final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+	GlobalKey _one = GlobalKey();
+	GlobalKey _two = GlobalKey();
+	GlobalKey _three = GlobalKey();
+
 	//UI part of the dashboard starts
 	@override
 	Widget build(BuildContext context) {
 
+		WidgetsBinding.instance.addPostFrameCallback((_) {
+			if(ModalRoute.of(context).isCurrent&& getHelp) {
+				getHelp = false;
+				return ShowCaseWidget.startShowCase(context, [_one, _two, _three]);
+			}
+		});
+
 		var top = 0.0;
 
 		return Scaffold(
+			key: _scaffoldKey,
 			body: NestedScrollView(
 				headerSliverBuilder: (BuildContext context, bool innerBoxisScrolled) {
 					return <Widget>[
@@ -54,6 +70,17 @@ class DashboardState extends State<Dashboard> {
 									expandedHeight: 170.0,
 									floating: true,
 									pinned: true,
+									leading: Showcase(
+										key: _two,
+										description: 'Press to open additional settings',
+										shapeBorder: CircleBorder(),
+										child: IconButton(
+											icon: Icon(Icons.dehaze),
+											onPressed: () {
+												_scaffoldKey.currentState.openDrawer();
+											},
+										),
+									),
 									flexibleSpace: LayoutBuilder(
 										builder: (BuildContext context, BoxConstraints constraints) {
 											top = constraints.biggest.height;
@@ -67,52 +94,57 @@ class DashboardState extends State<Dashboard> {
 												background: Card(
 													elevation: 20.0,
 													color: Colors.teal,
-													child: Row(
-														mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-														children: <Widget>[
-															Align(
-																alignment: Alignment.center,
-																child: CircleAvatar(
-																	radius: 50.0,
-																	backgroundColor: Colors.teal,
-																	child: ClipOval(
-																		child: SizedBox(
-																			width: 100.0,
-																			height: 100.0,
-																			child: _url!=null?Image.network(_url):
-																			DecoratedBox(decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/default.png'))))
+													child: Showcase(
+														key: _three,
+														description: "User's Profile",
+														shapeBorder: CircleBorder(),
+														child: Row(
+															mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+															children: <Widget>[
+																Align(
+																	alignment: Alignment.center,
+																	child: CircleAvatar(
+																		radius: 50.0,
+																		backgroundColor: Colors.teal,
+																		child: ClipOval(
+																			child: SizedBox(
+																				width: 100.0,
+																				height: 100.0,
+																				child: _url!=null?Image.network(_url):
+																				DecoratedBox(decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/default.png'))))
+																			),
 																		),
 																	),
 																),
-															),
-															Column(
-																mainAxisAlignment: MainAxisAlignment.center,
-																crossAxisAlignment: CrossAxisAlignment.start,
-																children: <Widget>[
-																	Container(
-																		child:Text(
-																			_student.name,
-																			textScaleFactor: 2,
-																			style: TextStyle(color: Colors.white),
+																Column(
+																	mainAxisAlignment: MainAxisAlignment.center,
+																	crossAxisAlignment: CrossAxisAlignment.start,
+																	children: <Widget>[
+																		Container(
+																			child:Text(
+																				_student.name,
+																				textScaleFactor: 2,
+																				style: TextStyle(color: Colors.white),
+																			),
 																		),
-																	),
-																	Container(
-																		child: Text(
-																			_student.regNo,
-																			textScaleFactor: 1.5,
-																			style: TextStyle(color: Colors.white),
+																		Container(
+																			child: Text(
+																				_student.regNo,
+																				textScaleFactor: 1.5,
+																				style: TextStyle(color: Colors.white),
+																			),
 																		),
-																	),
-																	Container(
-																		child: Text(
-																			_student.classId,
-																			textScaleFactor: 1.5,
-																			style: TextStyle(color: Colors.white),
+																		Container(
+																			child: Text(
+																				_student.classId,
+																				textScaleFactor: 1.5,
+																				style: TextStyle(color: Colors.white),
+																			),
 																		),
-																	),
-																],
-															)
-														]
+																	],
+																)
+															]
+														),
 													),
 												)
 											);
@@ -128,23 +160,31 @@ class DashboardState extends State<Dashboard> {
 				body: getSubjects()
 			),
 			//Floating action button to join new class
-			floatingActionButton: FloatingActionButton(
-				child: Icon(Icons.add),
-				onPressed: () {
-					if(_student.verify ==1)
-						Navigator.push(context, MaterialPageRoute(builder: (context) {
-							return JoinClass(_student);
-						}));
-					else
-						toast('Your profile is not verified');
-				},
-				tooltip: 'Join New Class',
-				backgroundColor: Colors.teal,
+			floatingActionButton: Showcase(
+				key: _one,
+				description: 'Tap to join new class',
+				shapeBorder: CircleBorder(),
+				child: FloatingActionButton(
+					child: Icon(Icons.add),
+					onPressed: () {
+						if(_student.verify == 1)
+							Navigator.push(context, MaterialPageRoute(builder: (context) {
+								return JoinClass(_student);
+							}));
+						else
+							toast('Your profile is not verified');
+					},
+					tooltip: 'Join New Class',
+					backgroundColor: Colors.teal,
+				),
 			),
 			drawer: Drawer(
 				child: ListView(
 					children: <Widget>[
 						DrawerHeader(
+							decoration: BoxDecoration(
+								color: Colors.teal
+							),
 							child: Icon(Icons.account_circle),
 						),
 						ListTile(
@@ -168,7 +208,7 @@ class DashboardState extends State<Dashboard> {
 							title: Text('Sign Out'),
 							onTap: () {
 								clearSharedPrefs(_student);
-								Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => Login()), (Route<dynamic> route) => false);
+								Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => Login(getHelp)), (Route<dynamic> route) => false);
 							},
 						)
 					],
@@ -228,7 +268,7 @@ class DashboardState extends State<Dashboard> {
 
 	double getPercent(Subject subject) {
 		if(int.parse(subject.present)+int.parse(subject.absent) == 0)
-			return 0.0;
+			return 1.0;
 		return int.parse(subject.present)/(int.parse(subject.present)+int.parse(subject.absent));
 	}
 

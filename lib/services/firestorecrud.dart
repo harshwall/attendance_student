@@ -9,6 +9,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:showcaseview/showcase_widget.dart';
 
 class FirestoreCRUD{
     //  This function looks for the document for login
@@ -19,7 +20,7 @@ class FirestoreCRUD{
     }
 
     //This function is called for loginresults[index].question,
-    static Future<bool> login(BuildContext context,Student student,inputPass) async {
+    static Future<bool> login(BuildContext context,Student student,inputPass, bool getHelp) async {
         Student incoming = Student.blank();
         bool value=false;
         await FirestoreCRUD.getDocsForLogin(student,inputPass)
@@ -30,7 +31,7 @@ class FirestoreCRUD{
                 student = incoming;
                 value=true;
                 storeData(student);
-                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => Dashboard(student)), (Route<dynamic> route) => false);
+                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => ShowCaseWidget(child: Dashboard(student, getHelp))), (Route<dynamic> route) => false);
             }
             catch(e){
                 toast('Wrong credentials');
