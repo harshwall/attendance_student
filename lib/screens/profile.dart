@@ -32,7 +32,7 @@ class _ProfileState extends State<Profile> {
 	Student _student;
 	_ProfileState(this._student);
 	File _image;
-	String _url = "https://d2x5ku95bkycr3.cloudfront.net/App_Themes/Common/images/profile/0_200.png";
+	String _url;
 
 	int _genderValue;
 	bool _isLoading=false;
@@ -80,12 +80,14 @@ class _ProfileState extends State<Profile> {
 													child: SizedBox(
 														width: 180.0,
 														height: 180.0,
-														child: (_image!=null)?
-														Image.file(_image,fit: BoxFit.fill):
-														Image.network(
+														child: (_image!=null)
+															?Image.file(_image,fit: BoxFit.fill)
+															:(_url==null? DecoratedBox(decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/default.png'))))
+															: Image.network(
 															_url,
 															fit: BoxFit.fill,
-														),
+														))
+														,
 													),
 												),
 											),

@@ -69,10 +69,7 @@ class SignUpState extends State<SignUp> {
                             height: 180.0,
                             child: (_image!=null)?
                             Image.file(_image,fit: BoxFit.fill):
-                            Image.network(
-                              "https://d2x5ku95bkycr3.cloudfront.net/App_Themes/Common/images/profile/0_200.png",
-                              fit: BoxFit.fill,
-                            ),
+                            DecoratedBox(decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/default.png'))))
                           ),
                         ),
                       ),

@@ -74,27 +74,25 @@ class DashboardState extends State<Dashboard> {
 																alignment: Alignment.center,
 																child: CircleAvatar(
 																	radius: 50.0,
-																	backgroundColor: Colors.blueAccent,
+																	backgroundColor: Colors.teal,
 																	child: ClipOval(
 																		child: SizedBox(
 																			width: 100.0,
 																			height: 100.0,
 																			child: _url!=null?Image.network(_url):
-																			Image.network(
-																				"https://d2x5ku95bkycr3.cloudfront.net/App_Themes/Common/images/profile/0_200.png",
-																				fit: BoxFit.fill,
-																			),
+																			DecoratedBox(decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/default.png'))))
 																		),
 																	),
 																),
 															),
 															Column(
 																mainAxisAlignment: MainAxisAlignment.center,
+																crossAxisAlignment: CrossAxisAlignment.start,
 																children: <Widget>[
 																	Container(
 																		child:Text(
 																			_student.name,
-																			textScaleFactor: 1.5,
+																			textScaleFactor: 2,
 																			style: TextStyle(color: Colors.white),
 																		),
 																	),

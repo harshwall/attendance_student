@@ -73,10 +73,11 @@ class FirestoreCRUD{
 
     //This function uploads the image
     static Future uploadPic(Student student,File _image) async {
-        String fileName = student.regNo;
+        String fileName = 'avatar_'+student.regNo;
         StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child(fileName);
         StorageUploadTask uploadTask = firebaseStorageRef.putFile(_image);
         StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
+        toast(taskSnapshot.toString());
     }
 
     static void storeData(Student student) async {
