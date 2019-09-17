@@ -390,7 +390,8 @@ class _ProfileState extends State<Profile> {
 											),
 										),
 										_student.verify==1?Icon(Icons.block):RaisedButton(
-											child: _isLoading?Loading(indicator: BallPulseIndicator(), size: 20.0):Text('Submit'),
+											color: Colors.black,
+											child: _isLoading?Loading(indicator: BallPulseIndicator(), size: 20.0):Text('Submit', style: TextStyle(color: Colors.white)),
 											shape: RoundedRectangleBorder(
 												borderRadius: BorderRadius.circular(30.0)
 											),

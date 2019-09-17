@@ -363,7 +363,9 @@ class SignUpState extends State<SignUp> {
                       ),
                     ),
                     RaisedButton(
-                      child: _isLoading?Loading(indicator: BallPulseIndicator(), size: 20.0):Text('Submit'),
+                      color: Colors.black,
+                      elevation: 10.0,
+                      child: _isLoading?Loading(indicator: BallPulseIndicator(), size: 20.0):Text('Submit', style: TextStyle(color: Colors.white)),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30.0)
                       ),
