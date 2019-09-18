@@ -64,7 +64,7 @@ class _ProfileState extends State<Profile> {
 	Widget build(BuildContext context) {
 		return Scaffold(
 			appBar: AppBar(
-				title: Text('SignUp'),
+				title: Text('Profile'),
 			),
 			body: Container(
 				padding: EdgeInsets.all(5.0),

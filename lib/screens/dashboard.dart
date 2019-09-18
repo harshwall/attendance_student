@@ -205,14 +205,18 @@ class DashboardState extends State<Dashboard> {
 							child: Icon(Icons.account_circle),
 						),
 						ListTile(
+							leading: Icon(Icons.contact_mail),
 							title: Text('Profile'),
 							onTap: () {
+								Navigator.pop(context);
+								Navigator.pop(context);
 								Navigator.push(context, MaterialPageRoute(builder: (context) {
 									return Profile(_student);
 								}));
 							},
 						),
 						ListTile(
+							leading: Icon(Icons.settings_overscan),
 							title: Text('QR Code'),
 							onTap: () {
 								Navigator.pop(context);
@@ -222,6 +226,7 @@ class DashboardState extends State<Dashboard> {
 							},
 						),
 						ListTile(
+							leading: Icon(Icons.exit_to_app),
 							title: Text('Sign Out'),
 							onTap: () {
 								clearSharedPrefs(_student);

@@ -48,6 +48,7 @@ class MyApp extends StatelessWidget {
       title: 'Attendance Student',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        fontFamily: 'Raleway',
         brightness: Brightness.light,
         primaryColor: Colors.teal,
       ),
