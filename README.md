@@ -1,6 +1,6 @@
 # attendance_student
 
-The student side application to view realtime attendance in varous subjects. The attendance_teacher app is available at this [link](https://github.com/saket1999/attendance_teacher)
+The student side application to view realtime attendance in various subjects. The attendance_teacher app is available at this [link](https://github.com/saket1999/attendance_teacher)
 
 ## Getting Started
 
