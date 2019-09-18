@@ -67,10 +67,10 @@ class FirestoreCRUD{
     //This method is called when student update their profile
     static Future<bool> profileUpdate(Student student, File _image, bool newPassword) async {
         if(newPassword) {
-            await Firestore.instance.collection('stud').document(student.documentId).updateData({'name': student.name, 'pass': student.pass, 'gender': student.gender, 'category': student.category, 'dob': student.dob, 'email': student.email, 'mobile': student.mobile});
+            await Firestore.instance.collection('stud').document(student.documentId).updateData({'name': student.name, 'pass': student.pass, 'gender': student.gender, 'category': student.category, 'dob': student.dob, 'email': student.email, 'mobile': student.mobile, 'verify': 0});
         }
         else
-            await Firestore.instance.collection('stud').document(student.documentId).updateData({'name': student.name, 'gender': student.gender, 'category': student.category, 'dob': student.dob, 'email': student.email, 'mobile': student.mobile});
+            await Firestore.instance.collection('stud').document(student.documentId).updateData({'name': student.name, 'gender': student.gender, 'category': student.category, 'dob': student.dob, 'email': student.email, 'mobile': student.mobile, 'verify': 0});
 
         if(_image!=null)
             await uploadPic(student, _image);

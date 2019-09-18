@@ -316,7 +316,7 @@ class _ProfileState extends State<Profile> {
 												textScaleFactor: 1.5,
 											),
 											Container(
-												width: 15,
+												width: 6,
 											),
 											Radio(
 												value: 0,

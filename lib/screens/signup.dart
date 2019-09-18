@@ -287,7 +287,7 @@ class SignUpState extends State<SignUp> {
                         textScaleFactor: 1.5,
                       ),
                       Container(
-                        width: 15,
+                        width: 6,
                       ),
                       Radio(
                         value: 0,
