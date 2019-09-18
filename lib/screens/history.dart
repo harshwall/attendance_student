@@ -3,6 +3,8 @@ import 'package:attendance_student/classes/subject.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+//	This screen give the detailed information of Student's attendance date-wise for a given subject
+//	_subject is the subject for which attendance is being showed
 class History extends StatefulWidget {
 
 	Subject _subject;
@@ -27,7 +29,6 @@ class _HistoryState extends State<History> {
 		);
 	}
 
-
 	//It returns the stream builder of that particular subject after running firebase queries.
 	Widget getHistory() {
 		return StreamBuilder<QuerySnapshot> (
@@ -40,7 +41,7 @@ class _HistoryState extends State<History> {
 		);
 	}
 
-	//returns the attendance as a list view
+	//Returns the attendance as a list view
 	getHistoryList(AsyncSnapshot<QuerySnapshot> snapshot) {
 		var listView = ListView.builder(itemBuilder: (context, index) {
 			if(index<snapshot.data.documents.length) {

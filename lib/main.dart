@@ -7,8 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcase_widget.dart';
 
+//  The App starts from the void main()
+
 void main() {
 
+  //  Shared Preferences is being checked. If it's present then student object is saved.
+  //  getHelp is used for ShowCase View.
   SharedPreferences.getInstance().then((prefs) {
     final String jsonObject = prefs.getString('storedObject');
     final String jsonId = prefs.getString('storedId');
@@ -31,8 +35,8 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-
+  // This widget is the root of your application. The app UI starts from MaterialApp
+  // check is used to decide if a user is already logged in or not.
   bool check;
   Student student;
   bool getHelp;
@@ -41,12 +45,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Attendance Student',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.light,
         primaryColor: Colors.teal,
       ),
+
+      //  If the user is logged in already then Dashboard is called, else Login page will be opened.
       home: check?ShowCaseWidget(child: Dashboard(student, getHelp),):Login(getHelp),
     );
   }

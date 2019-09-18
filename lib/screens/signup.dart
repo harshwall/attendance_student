@@ -11,6 +11,7 @@ import 'package:validators/validators.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:attendance_student/services/firestorecrud.dart';
 
+//  This screen is used when a new User SignUp takes place
 class SignUp extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -20,9 +21,13 @@ class SignUp extends StatefulWidget {
 
 class SignUpState extends State<SignUp> {
 
+  //  Created _signUpForm to validate and save the signUp form
+  //  Created _passKey to confirm that password ans confirm password are same before submission
   var _signUpForm = GlobalKey<FormState>();
   var _passKey = GlobalKey<FormFieldState>();
   Student student = Student.blank();
+
+  //  _image from user's device
   File _image;
 
   int _genderValue = 0;
@@ -418,6 +423,10 @@ class SignUpState extends State<SignUp> {
     );
   }
 
+    //	Converts gender from int to string
+    //	1 - Male
+    //  2 - Female
+    //	3 - Other
   String genderToString(int no) {
     switch(no) {
       case 0:
@@ -429,7 +438,7 @@ class SignUpState extends State<SignUp> {
     }
   }
 
-  //fetches image from gallery
+  //  Fetches image from gallery
   Future getImage() async {
     var image = await ImagePicker.pickImage(
         source: ImageSource.gallery

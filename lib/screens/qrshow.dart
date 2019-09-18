@@ -2,6 +2,7 @@ import 'package:attendance_student/classes/student.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
+//	This screen is used to show the QrCode for attendance
 class QrShow extends StatefulWidget {
 
 	Student _student;
@@ -23,6 +24,7 @@ class _QrShowState extends State<QrShow> {
 				title: Text('QR'),
 			),
 			body: Center(
+				//	This widget outputs the qrCode for the Scanning with Student's documentId as unique Id
 				child: QrImage(
 					data: _student.documentId,
 					version: QrVersions.auto,

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:loading/indicator/ball_pulse_indicator.dart';
 import 'package:loading/loading.dart';
 
+//	Login is a Stateful Widget for the login screen.
 class Login extends StatefulWidget {
 
 	bool getHelp;
@@ -16,6 +17,7 @@ class Login extends StatefulWidget {
 	}
 }
 
+//	LoginState is the state defined for Login Widget.
 class LoginState extends State<Login> {
 
 	bool getHelp;
@@ -95,7 +97,7 @@ class LoginState extends State<Login> {
 												setState(() {
 													_isLoading=true;
 												});
-												//An async is called to verify login
+												//An async function is called to verify login
 												FirestoreCRUD.login(context,student, inputPass, getHelp).then((bool value){
 													setState(() {
 														_isLoading=value;
@@ -104,6 +106,8 @@ class LoginState extends State<Login> {
 											}
 										}),
 								),
+
+								//	Raised Button for new user to SignUp
 								Padding(
 									padding: EdgeInsets.all(10.0),
 									child: RaisedButton(
@@ -113,7 +117,7 @@ class LoginState extends State<Login> {
 										),
 										color: Colors.white,
 										onPressed: _isLoading?null:() {
-											//Button shows the signup screen
+											//Button shows the signUp screen
 											Navigator.push(context, MaterialPageRoute(builder: (context) {
 												return SignUp();
 											}));

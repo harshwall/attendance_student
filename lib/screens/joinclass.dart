@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:loading/indicator/ball_pulse_indicator.dart';
 import 'package:loading/loading.dart';
 
+//	Used to join a new Class using Subject Id and Teacher's Id.
 class JoinClass extends StatefulWidget {
 
 	Student _student;
@@ -93,6 +94,7 @@ class _JoinClassState extends State<JoinClass> {
 												setState(() {
 													_isLoading=true;
 												});
+												// Method is called to join the new class
 												sendCode();
 											}
 										}),
@@ -105,6 +107,7 @@ class _JoinClassState extends State<JoinClass> {
 		);
 	}
 
+	//	This method is used to join new class. Contains queries to add students to teacher's subject and add subject to student's database
 	void sendCode() async {
 		Map<String, String> map = Map<String,String>();
 		map['docId'] = _student.documentId;

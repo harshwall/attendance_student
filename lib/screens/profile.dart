@@ -15,6 +15,8 @@ import 'package:loading/loading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:validators/validators.dart';
 
+//	Show the Profile of students.
+//	Editable only for students who are not verified or rejected.
 class Profile extends StatefulWidget {
 
 	Student _student;
@@ -26,11 +28,14 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
 
+	//	Created _profileForm to validate and save the profile form
+	//	Created _passKey to confirm that password and confirm password are same before submission
 	var _profileForm = GlobalKey<FormState>();
 	var _passKey = GlobalKey<FormFieldState>();
 
 	Student _student;
 	_ProfileState(this._student);
+	//	_image from user's device
 	File _image;
 	String _url;
 
@@ -51,6 +56,7 @@ class _ProfileState extends State<Profile> {
 		dateTime = DateTime.parse(_student.dob);
 		_currentCategorySelected = _student.category;
 		_genderValue = stringToGender(_student.gender);
+		//	getImageNetwork is used to retrieve the image url of student from FIrebase Storage
 		getImageNetwork();
 	}
 
@@ -101,6 +107,7 @@ class _ProfileState extends State<Profile> {
 													size: 30.0,
 												),
 												onPressed: _isLoading?null:() {
+													//	Image picker from device
 													getImage();
 												},
 											),
@@ -396,7 +403,7 @@ class _ProfileState extends State<Profile> {
 												borderRadius: BorderRadius.circular(30.0)
 											),
 											onPressed: () {
-												//The Sign Up button checks for below parameters
+												//The Submit button checks for below parameters
 												if(_profileForm.currentState.validate() && _isLoading==false) {
 													setState(() {
 														_isLoading = true;
@@ -460,6 +467,10 @@ class _ProfileState extends State<Profile> {
 		);
 	}
 
+	//	Converts gender from int to string
+	//	1 - Male
+	//  2 - Female
+	//	3 - Other
 	String genderToString(int no) {
 		switch(no) {
 			case 0:
@@ -471,6 +482,7 @@ class _ProfileState extends State<Profile> {
 		}
 	}
 
+	//	Inverse method of genderToString
 	int stringToGender(String gender) {
 		switch(gender) {
 			case 'Male':
@@ -482,7 +494,7 @@ class _ProfileState extends State<Profile> {
 		}
 	}
 
-	//fetches image from gallery
+	//	Fetches image from gallery
 	Future getImage() async {
 		var image = await ImagePicker.pickImage(
 			source: ImageSource.gallery
@@ -493,6 +505,7 @@ class _ProfileState extends State<Profile> {
 		});
 	}
 
+	//	Gets the image of student's profile image from firebase storage
 	void getImageNetwork() async {
 		FirebaseStorage.instance.ref().child(_student.regNo).getDownloadURL().then((storedUrl) {
 			setState(() {
@@ -501,6 +514,7 @@ class _ProfileState extends State<Profile> {
 		});
 	}
 
+	//	This method is used to clear the shared preferences when signOut button is pressed
 	void clearSharedPrefs(Student student) async {
 		final SharedPreferences prefs = await SharedPreferences.getInstance();
 		prefs.setString('storedObject', '');

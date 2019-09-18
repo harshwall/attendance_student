@@ -19,13 +19,17 @@ class FirestoreCRUD{
             .where('pass', isEqualTo: await compute(Password.getHash,inputPass)).getDocuments();
     }
 
-    //This function is called for loginresults[index].question,
+    //This function is called for loginresults
     static Future<bool> login(BuildContext context,Student student,inputPass, bool getHelp) async {
         Student incoming = Student.blank();
         bool value=false;
         await FirestoreCRUD.getDocsForLogin(student,inputPass)
             .then((QuerySnapshot docs) {
             try {
+                if(docs.metadata.isFromCache) {
+                    toast('You are not connected to Internet');
+                    return false;
+                }
                 incoming = Student.fromMapObject(docs.documents[0].data);
                 incoming.documentId = docs.documents[0].documentID;
                 student = incoming;
@@ -60,6 +64,7 @@ class FirestoreCRUD{
         return true;
     }
 
+    //This method is called when student update their profile
     static Future<bool> profileUpdate(Student student, File _image, bool newPassword) async {
         if(newPassword) {
             await Firestore.instance.collection('stud').document(student.documentId).updateData({'name': student.name, 'pass': student.pass, 'gender': student.gender, 'category': student.category, 'dob': student.dob, 'email': student.email, 'mobile': student.mobile});
@@ -81,6 +86,7 @@ class FirestoreCRUD{
         toast(taskSnapshot.toString());
     }
 
+    //This method stores the necessary information in sharedPreferences.
     static void storeData(Student student) async {
         final SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString('storedObject', json.encode(student.toMap()));

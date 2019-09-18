@@ -13,8 +13,10 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcaseview.dart';
 
-class Dashboard extends StatefulWidget {
 
+//	The first main screen where student get's his information displayed.
+class Dashboard extends StatefulWidget {
+	//	_student will hold the basic data of user.
 	Student _student;
 	bool getHelp;
 	Dashboard(this._student, this.getHelp);
@@ -27,7 +29,7 @@ class Dashboard extends StatefulWidget {
 }
 
 class DashboardState extends State<Dashboard> {
-
+	//_url will contain the url of student's profile photo.
 	Student _student;
 	bool getHelp;
 	DashboardState(this._student, this.getHelp);
@@ -35,10 +37,14 @@ class DashboardState extends State<Dashboard> {
 
 	void initState() {
 		super.initState();
+		//	getUrl is used to get the url of student's profile photo.
 		getURL();
 	}
 
+	//	_scaffoldKey is used to identify the scaffold.
 	final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+	//	GlobalKeys for Showcase view.
 	GlobalKey _one = GlobalKey();
 	GlobalKey _two = GlobalKey();
 	GlobalKey _three = GlobalKey();
@@ -47,6 +53,7 @@ class DashboardState extends State<Dashboard> {
 	@override
 	Widget build(BuildContext context) {
 
+		// WidgetsBinding is used to show the ShowCase view for the first time.
 		WidgetsBinding.instance.addPostFrameCallback((_) {
 			if(ModalRoute.of(context).isCurrent&& getHelp) {
 				getHelp = false;
@@ -54,6 +61,7 @@ class DashboardState extends State<Dashboard> {
 			}
 		});
 
+		//	top is used to get the size of SliverAppBar
 		var top = 0.0;
 
 		return Scaffold(
@@ -77,10 +85,13 @@ class DashboardState extends State<Dashboard> {
 										child: IconButton(
 											icon: Icon(Icons.dehaze),
 											onPressed: () {
+												//	It is used to open drawer on press of leading icon of SliverApp Bar.
 												_scaffoldKey.currentState.openDrawer();
 											},
 										),
 									),
+
+									//	Description of SliverAppBar
 									flexibleSpace: LayoutBuilder(
 										builder: (BuildContext context, BoxConstraints constraints) {
 											top = constraints.biggest.height;
@@ -155,10 +166,12 @@ class DashboardState extends State<Dashboard> {
 						)
 					];
 				},
-				//The dynnamic card view appBar ends here
+
+				//The dynamic card view appBar ends here
 				//Body shows the list of subjects student has
 				body: getSubjects()
 			),
+
 			//Floating action button to join new class
 			floatingActionButton: Showcase(
 				key: _one,
@@ -168,16 +181,20 @@ class DashboardState extends State<Dashboard> {
 					child: Icon(Icons.add),
 					onPressed: () {
 						if(_student.verify == 1)
+							// Navigated to JoinClass page when pressed.
 							Navigator.push(context, MaterialPageRoute(builder: (context) {
 								return JoinClass(_student);
 							}));
+						else if(_student.verify == 0)
+							toast('Your account is not verified');
 						else
-							toast('Your profile is not verified');
+							toast('Your account is rejected. \nPlease update your profile for re-evalution');
 					},
 					tooltip: 'Join New Class',
 					backgroundColor: Colors.teal,
 				),
 			),
+			//	Drawer is used to add additional options on Dashboard.
 			drawer: Drawer(
 				child: ListView(
 					children: <Widget>[
@@ -217,7 +234,7 @@ class DashboardState extends State<Dashboard> {
 		);
 	}
 
-	//Fetches subjects of the student fom the database
+	//Fetches subjects of the student fom the databaseprofile
 	Widget getSubjects() {
 		return StreamBuilder<QuerySnapshot> (
 			stream: Firestore.instance.collection('stud').document(_student.documentId).collection('subject').snapshots(),
@@ -266,12 +283,14 @@ class DashboardState extends State<Dashboard> {
 		return listView;
 	}
 
+	//This method is used to give the percentage from total present and absent of Student
 	double getPercent(Subject subject) {
 		if(int.parse(subject.present)+int.parse(subject.absent) == 0)
 			return 1.0;
 		return int.parse(subject.present)/(int.parse(subject.present)+int.parse(subject.absent));
 	}
 
+	// Async method to get the url of Student's profile from FirebaseStorage.
 	void getURL() async{
 		String url;
 		StorageReference ref = FirebaseStorage.instance.ref().child(_student.regNo);
@@ -283,6 +302,7 @@ class DashboardState extends State<Dashboard> {
 		});
 	}
 
+	// This method is used to give the idea of how much class can be leaved or more to attended to keep the attendance above 75%
 	String predictFuture(Subject subject) {
 		int p = int.parse(subject.present);
 		int a = int.parse(subject.absent);
@@ -303,6 +323,7 @@ class DashboardState extends State<Dashboard> {
 		}
 	}
 
+	// This method is used to clear the SharedPreferences when the user Sign Out
 	void clearSharedPrefs(Student student) async {
 		final SharedPreferences prefs = await SharedPreferences.getInstance();
 		prefs.setString('storedObject', '');
