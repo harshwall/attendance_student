@@ -8,6 +8,7 @@ The student side application to view realtime attendance in various subjects. Th
 - Create the database and download the 'google-services.json' file.
 - Place it in /android/app/
 - Edit the project name to 'com.example.attendance_student' in 'google-services.json'
+- You are good to go! :)
 
 ## Features
 - Student can join a class
