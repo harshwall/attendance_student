@@ -209,7 +209,6 @@ class DashboardState extends State<Dashboard> {
 							title: Text('Profile'),
 							onTap: () {
 								Navigator.pop(context);
-								Navigator.pop(context);
 								Navigator.push(context, MaterialPageRoute(builder: (context) {
 									return Profile(_student);
 								}));

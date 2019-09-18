@@ -83,7 +83,6 @@ class FirestoreCRUD{
         StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child(fileName);
         StorageUploadTask uploadTask = firebaseStorageRef.putFile(_image);
         StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
-        toast(taskSnapshot.toString());
     }
 
     //This method stores the necessary information in sharedPreferences.
