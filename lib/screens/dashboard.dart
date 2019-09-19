@@ -270,7 +270,7 @@ class DashboardState extends State<Dashboard> {
 					},
 					child: Card(
 						child: ListTile(
-							title: Text(subject.subjectId+'  '+subject.subjectName),
+							title: Text(subject.subjectId+'  '+subject.subjectName+'  : '+subject.present.toString()+'/'+(int.parse(subject.present)+int.parse(subject.absent)).toString()),
 							subtitle: Text(predictFuture(subject)),
 							trailing: CircularPercentIndicator(
 								radius: 50.0,
